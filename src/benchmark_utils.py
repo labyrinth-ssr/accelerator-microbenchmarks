@@ -19,12 +19,12 @@ import time
 from jax.experimental import multihost_utils
 
 
-def simple_timeit(f, *args, matrix_dim=None, warmup_tries = 10, tries=10, task=None, trace_dir=None) -> list[float]:
+def simple_timeit(f, *args, matrix_dim=None, trace_suffix=None, warmup_tries = 10, tries=10, task=None, trace_dir=None) -> list[float]:
     """Simple utility to time a function for multiple runs."""
     assert task is not None
 
     if trace_dir:
-        return timeit_from_trace(f, *args, matrix_dim=matrix_dim, warmup_tries=warmup_tries, tries=tries, task=task, trace_dir=trace_dir)
+        return timeit_from_trace(f, *args, matrix_dim=matrix_dim, trace_suffix=trace_suffix, warmup_tries=warmup_tries, tries=tries, task=task, trace_dir=trace_dir)
 
     is_multihost = jax.process_count() > 1
 
@@ -113,7 +113,7 @@ def is_local_directory_path(dir: str) -> bool:
     return dir.startswith("/") or dir.startswith("./") or dir.startswith("../")
 
 
-def timeit_from_trace(f, *args, matrix_dim=None, warmup_tries=10, tries=10, task=None, trace_dir=None) -> list[float]:
+def timeit_from_trace(f, *args, matrix_dim=None, trace_suffix=None, warmup_tries=10, tries=10, task=None, trace_dir=None) -> list[float]:
     """
     Time a function with jax.profiler and get the run time from the trace.
     """
@@ -128,7 +128,10 @@ def timeit_from_trace(f, *args, matrix_dim=None, warmup_tries=10, tries=10, task
     if is_multihost:
         multihost_utils.sync_global_devices(f'warmup_done_{task}')
 
-    if matrix_dim is not None:
+    # Determine trace name based on provided parameters
+    if trace_suffix is not None:
+        trace_name = f"{task}_{trace_suffix}"
+    elif matrix_dim is not None:
         trace_name = f"{task}_dim_{matrix_dim}"
     else:
         trace_name = f"t_{task}_" + "".join(
