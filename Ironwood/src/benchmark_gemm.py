@@ -45,7 +45,8 @@ os.environ["LIBTPU_INIT_ARGS"] = (
     "--xla_tpu_scoped_vmem_limit_kib=65536 "
     "--xla_tpu_vmem_scavenging_mode=NONE "
     "--xla_tpu_dvfs_p_state=7 "
-    "--xla_mosaic_dump_to=/microbenchmarks/mosaic_dumps"
+    "--xla_mosaic_enable_dump_debug_info=true "
+    "--xla_mosaic_dump_to=/microbenchmarks/mosaic_dumps "
 )
 
 TRACE_BASE_DIR = None
