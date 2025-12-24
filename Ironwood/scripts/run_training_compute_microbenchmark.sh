@@ -2,7 +2,7 @@
 
 # Run command: sh ./Ironwood/scripts/run_training_compute_microbenchmark.sh
 
-CONFIG_NAMES="gemm_simple"
+CONFIG_NAMES="quantization_static_scaling transpose_quantization_static_scaling swiglu_fwd rmsnorm_fwd add quantization transpose_quantization"
 
 for CONFIG in $CONFIG_NAMES
 do
