@@ -1,0 +1,62 @@
+benchmarks:
+  # You can run individual operations
+  - benchmark_name: "add"
+    benchmark_params:
+      - { m: 1024, n: 1024, num_runs: 10 }
+      - { m: 2048, n: 2048, num_runs: 10 }
+    csv_path: "../data/microbenchmarks/binary_ops"
+    xla_dump_dir: "../data/microbenchmarks/binary_ops/hlo_graphs"
+
+  - benchmark_name: "sub"
+    benchmark_params:
+      - { m: 1024, n: 1024, num_runs: 10 }
+    csv_path: "../data/microbenchmarks/binary_ops"
+    xla_dump_dir: "../data/microbenchmarks/binary_ops/hlo_graphs"
+
+  - benchmark_name: "mul"
+    benchmark_params:
+      - { m: 1024, n: 1024, num_runs: 10 }
+    csv_path: "../data/microbenchmarks/binary_ops"
+    xla_dump_dir: "../data/microbenchmarks/binary_ops/hlo_graphs"
+
+  - benchmark_name: "div"
+    benchmark_params:
+      - { m: 1024, n: 1024, num_runs: 10 }
+    csv_path: "../data/microbenchmarks/binary_ops"
+    xla_dump_dir: "../data/microbenchmarks/binary_ops/hlo_graphs"
+
+  - benchmark_name: "rem"
+    benchmark_params:
+      - { m: 1024, n: 1024, num_runs: 10 }
+    csv_path: "../data/microbenchmarks/binary_ops"
+    xla_dump_dir: "../data/microbenchmarks/binary_ops/hlo_graphs"
+
+  - benchmark_name: "pow"
+    benchmark_params:
+      - { m: 1024, n: 1024, num_runs: 10 }
+    csv_path: "../data/microbenchmarks/binary_ops"
+    xla_dump_dir: "../data/microbenchmarks/binary_ops/hlo_graphs"
+
+  - benchmark_name: "maximum"
+    benchmark_params:
+      - { m: 1024, n: 1024, num_runs: 10 }
+    csv_path: "../data/microbenchmarks/binary_ops"
+    xla_dump_dir: "../data/microbenchmarks/binary_ops/hlo_graphs"
+
+  - benchmark_name: "minimum"
+    benchmark_params:
+      - { m: 1024, n: 1024, num_runs: 10 }
+    csv_path: "../data/microbenchmarks/binary_ops"
+    xla_dump_dir: "../data/microbenchmarks/binary_ops/hlo_graphs"
+
+  - benchmark_name: "atan2"
+    benchmark_params:
+      - { m: 1024, n: 1024, num_runs: 10 }
+    csv_path: "../data/microbenchmarks/binary_ops"
+    xla_dump_dir: "../data/microbenchmarks/binary_ops/hlo_graphs"
+
+  - benchmark_name: "nextafter"
+    benchmark_params:
+      - { m: 1024, n: 1024, num_runs: 10 }
+    csv_path: "../data/microbenchmarks/binary_ops"
+    xla_dump_dir: "../data/microbenchmarks/binary_ops/hlo_graphs"

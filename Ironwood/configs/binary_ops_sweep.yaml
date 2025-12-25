@@ -1,0 +1,59 @@
+benchmarks:
+  # Example 1: Sweep matrix sizes for add operation
+  - benchmark_name: "add"
+    benchmark_sweep_params:
+      - {
+          m_range: { start: 1024, end: 8192, multiplier: 2 },
+          n: "SAME_AS_m", # n will be set to the same value as m
+          num_runs: 10,
+        }
+    trace_dir: "../data/vpu-microbench/add"
+    xlml_metrics_dir: "../data/vpu-microbench/add"
+    csv_path: "../data/microbenchmarks/binary_ops_sweep"
+    xla_dump_dir: "../data/microbenchmarks/binary_ops_sweep/hlo_graphs"
+
+  # Example 2: Sweep matrix sizes for multiple binary ops using individual functions
+  - benchmark_name: "mul"
+    benchmark_sweep_params:
+      - {
+          m_range: { start: 1024, end: 4096, multiplier: 2 },
+          n: "SAME_AS_m",
+          num_runs: 10,
+        }
+    csv_path: "../data/microbenchmarks/binary_ops_sweep"
+    xla_dump_dir: "../data/microbenchmarks/binary_ops_sweep/hlo_graphs"
+
+  - benchmark_name: "div"
+    benchmark_sweep_params:
+      - {
+          m_range: { start: 1024, end: 4096, multiplier: 2 },
+          n: "SAME_AS_m",
+          num_runs: 10,
+        }
+    csv_path: "../data/microbenchmarks/binary_ops_sweep"
+    xla_dump_dir: "../data/microbenchmarks/binary_ops_sweep/hlo_graphs"
+
+  # Example 3: Using the generic binary_op function
+  # Note: You need to pass 'op_name' parameter to specify which operation to run
+  - benchmark_name: "binary_op"
+    benchmark_params:
+      - { op_name: "add", m: 1024, n: 1024, num_runs: 10 }
+      - { op_name: "sub", m: 1024, n: 1024, num_runs: 10 }
+      - { op_name: "mul", m: 1024, n: 1024, num_runs: 10 }
+      - { op_name: "max", m: 1024, n: 1024, num_runs: 10 }
+      - { op_name: "min", m: 1024, n: 1024, num_runs: 10 }
+    csv_path: "../data/microbenchmarks/binary_ops_sweep"
+    xla_dump_dir: "../data/microbenchmarks/binary_ops_sweep/hlo_graphs"
+
+  # Example 4: Run all operations with the same parameters using list sweep
+  - benchmark_name: "maximum"
+    benchmark_sweep_params:
+      - { m_list: [512, 1024, 2048, 4096], n: "SAME_AS_m", num_runs: 10 }
+    csv_path: "../data/microbenchmarks/binary_ops_sweep"
+    xla_dump_dir: "../data/microbenchmarks/binary_ops_sweep/hlo_graphs"
+
+  - benchmark_name: "minimum"
+    benchmark_sweep_params:
+      - { m_list: [512, 1024, 2048, 4096], n: "SAME_AS_m", num_runs: 10 }
+    csv_path: "../data/microbenchmarks/binary_ops_sweep"
+    xla_dump_dir: "../data/microbenchmarks/binary_ops_sweep/hlo_graphs"
