@@ -8,9 +8,9 @@ benchmarks:
       - { m: 16384, k: 16384, n: 16384 }
       - { m: 32768, k: 32768, n: 32768 }
       - { m: 65536, k: 65536, n: 65536 }
-    trace_dir: "/tmp/microbenchmarks/matmul"
-    csv_path: "/tmp/microbenchmarks/matmul"
-    xlml_metrics_dir: "/tmp/microbenchmarks/matmul"
+    trace_dir: "/data/microbenchmarks/v6e/matmul"
+    csv_path: "/data/microbenchmarks/v6e/matmul"
+    xlml_metrics_dir: "/data/microbenchmarks/v6e/matmul"
   - benchmark_name: "single_host_naive_matmul"
     benchmark_sweep_params:
       - { m: 1024, k: 1024, n: 1024 }
@@ -20,9 +20,9 @@ benchmarks:
       - { m: 16384, k: 16384, n: 16384 }
       - { m: 32768, k: 32768, n: 32768 }
       - { m: 65536, k: 65536, n: 65536 }
-    trace_dir: "/tmp/microbenchmarks/matmul"
-    csv_path: "/tmp/microbenchmarks/matmul"
-    xlml_metrics_dir: "/tmp/microbenchmarks/matmul"
+    trace_dir: "/data/microbenchmarks/v6e/matmul"
+    csv_path: "/data/microbenchmarks/v6e/matmul"
+    xlml_metrics_dir: "/data/microbenchmarks/v6e/matmul"
   - benchmark_name: "multilayer_collective_matmul"
     benchmark_sweep_params:
       - { m: 1024, k: 1024, n: 1024 }
@@ -32,9 +32,9 @@ benchmarks:
       - { m: 16384, k: 16384, n: 16384 }
       - { m: 32768, k: 32768, n: 32768 }
       - { m: 65536, k: 65536, n: 65536 }
-    trace_dir: "/tmp/microbenchmarks/matmul"
-    csv_path: "/tmp/microbenchmarks/matmul"
-    xlml_metrics_dir: "/tmp/microbenchmarks/matmul"
+    trace_dir: "/data/microbenchmarks/v6e/matmul"
+    csv_path: "/data/microbenchmarks/v6e/matmul"
+    xlml_metrics_dir: "/data/microbenchmarks/v6e/matmul"
   - benchmark_name: "collective_matmul_one_direction"
     benchmark_sweep_params:
       - { m: 1024, k: 1024, n: 1024 }
@@ -44,9 +44,9 @@ benchmarks:
       - { m: 16384, k: 16384, n: 16384 }
       - { m: 32768, k: 32768, n: 32768 }
       - { m: 65536, k: 65536, n: 65536 }
-    trace_dir: "/tmp/microbenchmarks/matmul"
-    csv_path: "/tmp/microbenchmarks/matmul"
-    xlml_metrics_dir: "/tmp/microbenchmarks/matmul"
+    trace_dir: "/data/microbenchmarks/v6e/matmul"
+    csv_path: "/data/microbenchmarks/v6e/matmul"
+    xlml_metrics_dir: "/data/microbenchmarks/v6e/matmul"
   - benchmark_name: "collective_matmul_two_directions"
     benchmark_sweep_params:
       - { m: 1024, k: 1024, n: 1024 }
@@ -56,5 +56,5 @@ benchmarks:
       - { m: 16384, k: 16384, n: 16384 }
       - { m: 32768, k: 32768, n: 32768 }
       - { m: 65536, k: 65536, n: 65536 }
-    trace_dir: "/tmp/microbenchmarks/matmul"
-    csv_path: "/tmp/microbenchmarks/matmul"
+    trace_dir: "/data/microbenchmarks/v6e/matmul"
+    csv_path: "/data/microbenchmarks/v6e/matmul"

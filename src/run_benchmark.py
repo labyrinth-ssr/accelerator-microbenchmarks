@@ -76,7 +76,7 @@ dtype_mapping = {
 
 # Always dump HLOs
 TMP_XLA_DUMP_DIR = "/tmp/microbenchmarks/hlo_graphs"
-os.environ["XLA_FLAGS"] = f"--xla_dump_to={TMP_XLA_DUMP_DIR}"
+os.environ["XLA_FLAGS"] = f"--xla_dump_to={TMP_XLA_DUMP_DIR} --xla_jf_dump_to=/data/microbenchmarks/v6e/llo"
 
 
 def get_benchmark_config(config_path: str) -> Dict[str, Any]:
