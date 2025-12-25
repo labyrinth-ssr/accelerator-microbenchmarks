@@ -1,9 +1,9 @@
 benchmarks:
   - benchmark_name: "swiglu_fwd"
-    trace_dir: "../data/microbenchmarks/swiglu_fwd"
-    csv_path: "../data/microbenchmarks/swiglu_fwd"
-    xlml_metrics_dir: "../data/microbenchmarks/swiglu_fwd"
-    xla_dump_dir: "../data/microbenchmarks/swiglu_fwd/hlo_graphs"
+    trace_dir: "../data/vpu-microbench/swiglu_fwd"
+    csv_path: "../data/vpu-microbench/swiglu_fwd"
+    xlml_metrics_dir: "../data/vpu-microbench/swiglu_fwd"
+    xla_dump_dir: "../data/vpu-microbench/swiglu_fwd/hlo_graphs"
     num_runs: 100
     benchmark_sweep_params:
       - { m: 4096, n: 1024 }

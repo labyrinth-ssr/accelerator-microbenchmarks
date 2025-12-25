@@ -14,3 +14,5 @@ do
 
   echo "--- Finished benchmark for ${CONFIG} ---"
 done
+
+add.yaml,quantization.yaml,transpose_quantization.yaml,quantization_static_scaling.yaml,transpose_quantization_static_scaling.yaml,swiglu_fwd.yaml,rmsnorm_fwd

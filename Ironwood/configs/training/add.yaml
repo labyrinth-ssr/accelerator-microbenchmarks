@@ -1,9 +1,9 @@
 benchmarks:
   - benchmark_name: "add"
-    trace_dir: "../data/microbenchmarks/add"
-    csv_path: "../data/microbenchmarks/add"
-    xlml_metrics_dir: "../data/microbenchmarks/add"
-    xla_dump_dir: "../data/microbenchmarks/add/hlo_graphs"
+    trace_dir: "../data/vpu-microbench/add"
+    csv_path: "../data/vpu-microbench/add"
+    xlml_metrics_dir: "../data/vpu-microbench/add"
+    xla_dump_dir: "../data/vpu-microbench/add/hlo_graphs"
     num_runs: 100
     benchmark_sweep_params:
       - { m: 2048, n: 7168 }

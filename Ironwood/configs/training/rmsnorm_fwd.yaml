@@ -1,9 +1,9 @@
 benchmarks:
   - benchmark_name: "rmsnorm_fwd"
-    trace_dir: "../data/microbenchmarks/rmsnorm_fwd"
-    csv_path: "../data/microbenchmarks/rmsnorm_fwd"
-    xlml_metrics_dir: "../data/microbenchmarks/rmsnorm_fwd"
-    xla_dump_dir: "../data/microbenchmarks/rmsnorm_fwd/hlo_graphs"
+    trace_dir: "../data/vpu-microbench/rmsnorm_fwd"
+    csv_path: "../data/vpu-microbench/rmsnorm_fwd"
+    xlml_metrics_dir: "../data/vpu-microbench/rmsnorm_fwd"
+    xla_dump_dir: "../data/vpu-microbench/rmsnorm_fwd/hlo_graphs"
     num_runs: 100
     benchmark_sweep_params:
       - { m: 2048, n: 7168 }

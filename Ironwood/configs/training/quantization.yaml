@@ -1,9 +1,9 @@
 benchmarks:
   - benchmark_name: "quantization"
-    trace_dir: "../data/microbenchmarks/quantization"
-    csv_path: "../data/microbenchmarks/quantization"
-    xlml_metrics_dir: "../data/microbenchmarks/quantization"
-    xla_dump_dir: "../data/microbenchmarks/quantization/hlo_graphs"
+    trace_dir: "../data/vpu-microbench/quantization"
+    csv_path: "../data/vpu-microbench/quantization"
+    xlml_metrics_dir: "../data/vpu-microbench/quantization"
+    xla_dump_dir: "../data/vpu-microbench/quantization/hlo_graphs"
     num_runs: 100
     benchmark_sweep_params:
       - { m: 512, n: 4096 }
