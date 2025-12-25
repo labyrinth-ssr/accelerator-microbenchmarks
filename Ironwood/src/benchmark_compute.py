@@ -10,6 +10,15 @@ Considered ops:
 7. rmsnorm_fwd
 8. rmsnorm_bwd
 9. add
+10. sub
+11. mul
+12. div
+13. rem
+14. pow
+15. maximum
+16. minimum
+17. atan2
+18. nextafter
 """
 
 import os
@@ -28,6 +37,7 @@ from benchmark_utils import (
     unified_bytes_metrics,
 )
 import jax
+from jax import lax
 from jax.experimental.shard_map import shard_map
 import jax.numpy as jnp
 from qwix import pallas as qpl
@@ -661,3 +671,261 @@ def add_calculate_metrics(m: int, n: int, time_ms_list: list[float]) -> Dict[str
     return unified_bytes_metrics(
         m, n, time_ms_list, total_bytes, total_bytes_all_devices
     )
+
+
+# Binary operations dictionary
+binary_ops = {
+    "add": lax.add,
+    "sub": lax.sub,
+    "mul": lax.mul,
+    "div": lax.div,
+    "rem": lax.rem,
+    "pow": lax.pow,
+    "max": lax.max,
+    "min": lax.min,
+    "atan2": lax.atan2,
+    "nextafter": lax.nextafter,
+}
+
+
+def binary_op(
+    op_name: str,
+    m: int,
+    n: int,
+    num_runs: int = 1,
+    trace_dir: str = None,
+) -> Dict[str, Any]:
+    """
+    Generic binary operation benchmark that can run any operation from binary_ops.
+
+    Args:
+        op_name: Name of the operation (e.g., "add", "sub", "mul", etc.)
+        m: First dimension of the matrices
+        n: Second dimension of the matrices
+        num_runs: Number of runs for benchmarking
+        trace_dir: Directory to save traces
+
+    Returns:
+        Dictionary with timing results
+
+    Example:
+        # Run all binary operations
+        ops_to_run = ["add", "sub", "mul", "div", "max", "min"]
+        for op in ops_to_run:
+            result = binary_op(op, m=1024, n=1024, num_runs=10)
+            print(f"{op}: {result}")
+    """
+    if op_name not in binary_ops:
+        raise ValueError(
+            f"Unknown operation '{op_name}'. Available operations: {list(binary_ops.keys())}"
+        )
+
+    op_fn = binary_ops[op_name]
+    return _binary_op_benchmark(m, n, op_fn, op_name, num_runs, trace_dir)
+
+
+def binary_op_calculate_metrics(
+    m: int, n: int, time_ms_list: list[float]
+) -> Dict[str, Any]:
+    """Generic metrics calculation for any binary operation."""
+    return _binary_op_calculate_metrics(m, n, time_ms_list)
+
+
+def _binary_op_benchmark(
+    m: int,
+    n: int,
+    op_fn: Callable,
+    op_name: str,
+    num_runs: int = 1,
+    trace_dir: str = None,
+) -> Dict[str, Any]:
+    """
+    Generic binary operation benchmark.
+    Z = op_fn(X, Y)
+    """
+
+    def f(x, y):
+        with jax.named_scope(MARKER):
+            return op_fn(x, y)
+
+    mesh = create_mesh(SHARDING_STRATEGY)
+    x_sharding = get_output_named_shading(mesh, SHARDING_STRATEGY)
+    y_sharding = get_output_named_shading(mesh, SHARDING_STRATEGY)
+    out_sharding = get_out_sharding(SHARDING_STRATEGY)
+    jit_sharded_f = jax.jit(
+        shard_map(
+            f,
+            mesh,
+            in_specs=(x_sharding.spec, y_sharding.spec),
+            out_specs=out_sharding,
+            check_rep=False,
+        )
+    )
+    x_shape = (m, n)
+    y_shape = (m, n)
+    x_dtype = jnp.bfloat16
+    y_dtype = jnp.bfloat16
+
+    key = jax.random.key(SEED)
+
+    def data_generator():
+        """Creates new random data on host and puts it on device."""
+        nonlocal key
+        key, k1, k2 = jax.random.split(key, 3)
+
+        x_host = jax.random.normal(k1, x_shape).astype(x_dtype)
+        y_host = jax.random.normal(k2, y_shape).astype(y_dtype)
+
+        x_device = jax.device_put(x_host, x_sharding)
+        y_device = jax.device_put(y_host, y_sharding)
+
+        return (x_device, y_device)
+
+    time_ms_list = iteration_timeit(
+        jit_sharded_f,
+        data_generator,
+        matrix_dim=f"{m}x{n}",
+        tries=num_runs,
+        task=op_name,
+        trace_dir=trace_dir,
+    )
+    return {"time_ms_list": time_ms_list}
+
+
+def _binary_op_calculate_metrics(
+    m: int, n: int, time_ms_list: list[float]
+) -> Dict[str, Any]:
+    """Generic metrics calculation for binary operations."""
+    total_bytes = 6 * m * n
+    total_bytes, total_bytes_all_devices = handle_based_on_sharding(
+        total_bytes, SHARDING_STRATEGY
+    )
+    return unified_bytes_metrics(
+        m, n, time_ms_list, total_bytes, total_bytes_all_devices
+    )
+
+
+def sub(
+    m: int,
+    n: int,
+    num_runs: int = 1,
+    trace_dir: str = None,
+) -> Dict[str, Any]:
+    """Z = X - Y"""
+    return _binary_op_benchmark(m, n, lax.sub, "sub", num_runs, trace_dir)
+
+
+def sub_calculate_metrics(m: int, n: int, time_ms_list: list[float]) -> Dict[str, Any]:
+    return _binary_op_calculate_metrics(m, n, time_ms_list)
+
+
+def mul(
+    m: int,
+    n: int,
+    num_runs: int = 1,
+    trace_dir: str = None,
+) -> Dict[str, Any]:
+    """Z = X * Y"""
+    return _binary_op_benchmark(m, n, lax.mul, "mul", num_runs, trace_dir)
+
+
+def mul_calculate_metrics(m: int, n: int, time_ms_list: list[float]) -> Dict[str, Any]:
+    return _binary_op_calculate_metrics(m, n, time_ms_list)
+
+
+def div(
+    m: int,
+    n: int,
+    num_runs: int = 1,
+    trace_dir: str = None,
+) -> Dict[str, Any]:
+    """Z = X / Y"""
+    return _binary_op_benchmark(m, n, lax.div, "div", num_runs, trace_dir)
+
+
+def div_calculate_metrics(m: int, n: int, time_ms_list: list[float]) -> Dict[str, Any]:
+    return _binary_op_calculate_metrics(m, n, time_ms_list)
+
+
+def rem(
+    m: int,
+    n: int,
+    num_runs: int = 1,
+    trace_dir: str = None,
+) -> Dict[str, Any]:
+    """Z = X % Y (remainder)"""
+    return _binary_op_benchmark(m, n, lax.rem, "rem", num_runs, trace_dir)
+
+
+def rem_calculate_metrics(m: int, n: int, time_ms_list: list[float]) -> Dict[str, Any]:
+    return _binary_op_calculate_metrics(m, n, time_ms_list)
+
+
+def pow(
+    m: int,
+    n: int,
+    num_runs: int = 1,
+    trace_dir: str = None,
+) -> Dict[str, Any]:
+    """Z = X ** Y"""
+    return _binary_op_benchmark(m, n, lax.pow, "pow", num_runs, trace_dir)
+
+
+def pow_calculate_metrics(m: int, n: int, time_ms_list: list[float]) -> Dict[str, Any]:
+    return _binary_op_calculate_metrics(m, n, time_ms_list)
+
+
+def maximum(
+    m: int,
+    n: int,
+    num_runs: int = 1,
+    trace_dir: str = None,
+) -> Dict[str, Any]:
+    """Z = max(X, Y)"""
+    return _binary_op_benchmark(m, n, lax.max, "max", num_runs, trace_dir)
+
+
+def maximum_calculate_metrics(m: int, n: int, time_ms_list: list[float]) -> Dict[str, Any]:
+    return _binary_op_calculate_metrics(m, n, time_ms_list)
+
+
+def minimum(
+    m: int,
+    n: int,
+    num_runs: int = 1,
+    trace_dir: str = None,
+) -> Dict[str, Any]:
+    """Z = min(X, Y)"""
+    return _binary_op_benchmark(m, n, lax.min, "min", num_runs, trace_dir)
+
+
+def minimum_calculate_metrics(m: int, n: int, time_ms_list: list[float]) -> Dict[str, Any]:
+    return _binary_op_calculate_metrics(m, n, time_ms_list)
+
+
+def atan2(
+    m: int,
+    n: int,
+    num_runs: int = 1,
+    trace_dir: str = None,
+) -> Dict[str, Any]:
+    """Z = atan2(X, Y)"""
+    return _binary_op_benchmark(m, n, lax.atan2, "atan2", num_runs, trace_dir)
+
+
+def atan2_calculate_metrics(m: int, n: int, time_ms_list: list[float]) -> Dict[str, Any]:
+    return _binary_op_calculate_metrics(m, n, time_ms_list)
+
+
+def nextafter(
+    m: int,
+    n: int,
+    num_runs: int = 1,
+    trace_dir: str = None,
+) -> Dict[str, Any]:
+    """Z = nextafter(X, Y)"""
+    return _binary_op_benchmark(m, n, lax.nextafter, "nextafter", num_runs, trace_dir)
+
+
+def nextafter_calculate_metrics(m: int, n: int, time_ms_list: list[float]) -> Dict[str, Any]:
+    return _binary_op_calculate_metrics(m, n, time_ms_list)
