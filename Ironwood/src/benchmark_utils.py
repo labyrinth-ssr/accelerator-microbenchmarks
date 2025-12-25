@@ -1076,7 +1076,7 @@ def create_mesh(strategy: ShardingStrategy) -> Mesh:
         mesh_axes = ("chip", "device")
         mesh = jax.sharding.Mesh(np.array(jax.devices()).reshape(mesh_shape), mesh_axes)
     elif strategy==ShardingStrategy.NO_SHARDING:
-        mesh = Mesh(np.array(jax.devices()[0]), axis_names="device")
+        mesh = Mesh(np.array([jax.devices()[0]]), axis_names="device")
     else:
         mesh = Mesh(np.array(jax.devices()), axis_names="device")
     return mesh
