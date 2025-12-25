@@ -75,8 +75,11 @@ dtype_mapping = {
 }
 
 # Always dump HLOs
+os.environ["LIBTPU_INIT_ARGS"] = (
+    "--xla_jf_dump_to=/home/gcpuser/microbenchmarks/matmul/llo"
+)
 TMP_XLA_DUMP_DIR = "/tmp/microbenchmarks/hlo_graphs"
-os.environ["XLA_FLAGS"] = f"--xla_dump_to={TMP_XLA_DUMP_DIR} --xla_jf_dump_to=/home/gcpuser/microbenchmarks/matmul/llo"
+os.environ["XLA_FLAGS"] = f"--xla_dump_to={TMP_XLA_DUMP_DIR}"
 
 
 def get_benchmark_config(config_path: str) -> Dict[str, Any]:
