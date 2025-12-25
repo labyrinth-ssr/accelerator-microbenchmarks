@@ -310,17 +310,16 @@ def swiglu_fwd(
     mesh = create_mesh(SHARDING_STRATEGY)
     x_sharding = get_rowwise_named_shading(mesh, SHARDING_STRATEGY)
     out_sharding = get_rowwise_named_shading(mesh, SHARDING_STRATEGY)
-    jitted_f = jax.jit(f)
 
-    # jit_sharded_f = jax.jit(
-    #     shard_map(
-    #         f,
-    #         mesh,
-    #         in_specs=x_sharding.spec,
-    #         out_specs=out_sharding.spec,
-    #         check_rep=False,
-    #     )
-    # )
+    jit_sharded_f = jax.jit(
+        shard_map(
+            f,
+            mesh,
+            in_specs=x_sharding.spec,
+            out_specs=out_sharding.spec,
+            check_rep=False,
+        )
+    )
 
     x_shape = (m, n)
     x_dtype = jnp.bfloat16
@@ -336,7 +335,7 @@ def swiglu_fwd(
         return (x_device,)
 
     time_ms_list = iteration_timeit(
-        jitted_f,
+        jit_sharded_f,
         data_generator,
         matrix_dim=f"{m}x{n}",
         tries=num_runs,
@@ -614,16 +613,15 @@ def add(
     x_sharding = get_output_named_shading(mesh, SHARDING_STRATEGY)
     y_sharding = get_output_named_shading(mesh, SHARDING_STRATEGY)
     out_sharding = get_out_sharding(SHARDING_STRATEGY)
-    jitted_f = jax.jit(f)
-    # jit_sharded_f = jax.jit(
-    #     shard_map(
-    #         f,
-    #         mesh,
-    #         in_specs=(x_sharding.spec, y_sharding.spec),
-    #         out_specs=out_sharding,
-    #         check_rep=False,
-    #     )
-    # )
+    jit_sharded_f = jax.jit(
+        shard_map(
+            f,
+            mesh,
+            in_specs=(x_sharding.spec, y_sharding.spec),
+            out_specs=out_sharding,
+            check_rep=False,
+        )
+    )
     x_shape = (m, n)
     y_shape = (m, n)
     x_dtype = jnp.bfloat16
@@ -645,7 +643,7 @@ def add(
         return (x_device, y_device)
 
     time_ms_list = iteration_timeit(
-        jitted_f,
+        jit_sharded_f,
         data_generator,
         matrix_dim=f"{m}x{n}",
         tries=num_runs,
