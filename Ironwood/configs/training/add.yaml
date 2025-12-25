@@ -16,3 +16,8 @@ benchmarks:
       - { m: 4096, n: 16384 }
       - { m: 256, n: 8192 }
       - { m: 2048, n: 16384 }
+      - {
+          m_range: { start: 1024, end: 8192, multiplier: 2 },
+          n: "SAME_AS_m", # n will be set to the same value as m
+          num_runs: 100,
+        }
