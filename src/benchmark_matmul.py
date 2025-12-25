@@ -34,7 +34,8 @@ os.environ["LIBTPU_INIT_ARGS"] = (
     "--xla_tpu_overlap_compute_collective_tc=true "
     "--xla_enable_async_all_gather=true "
     "--xla_enable_async_collective_permute=true "
-    "--xla_tpu_enable_all_experimental_scheduler_features=true"
+    "--xla_tpu_enable_all_experimental_scheduler_features=true "
+    "--xla_jf_dump_to=/home/gcpuser/microbenchmarks/matmul/llo"
 )
 TRACE_BASE_DIR = None
 METRICS_JSONL_DIR = None
