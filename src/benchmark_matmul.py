@@ -23,6 +23,10 @@ from jax.sharding import Mesh
 from jax.sharding import NamedSharding
 from jax.sharding import PartitionSpec as P
 import numpy as np
+from jax.extend import core
+
+jax.lax.add(1, 1)  # Workaround for
+
 
 # pylint: disable=g-importing-member
 # Set the environment variable for TPU initialization arguments to optimize
