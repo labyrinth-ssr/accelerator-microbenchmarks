@@ -22,6 +22,7 @@ import copy
 import pandas as pd
 import ast
 import json
+import shutil
 
 COLLECTIVE_BENCHMARK_MAP = {
     "all_gather": "benchmark_collectives.all_gather_benchmark",
@@ -340,8 +341,15 @@ def run_single_benchmark(benchmark_config: Dict[str, Any], output_path: str):
     if not benchmark_name:
         raise ValueError("Each benchmark must have a 'benchmark_name'.")
 
+    # Clean up output directories before starting the benchmark
+    dirs_to_clean = [trace_dir, xlml_metrics_dir, csv_path, xla_dump_dir]
+    for dir_path in dirs_to_clean:
+        if dir_path and os.path.exists(dir_path):
+            print(f"Cleaning up directory: {dir_path}")
+            shutil.rmtree(dir_path)
+
     # Get the benchmark function
-    
+
     benchmark_func, calculate_metrics_func = get_benchmark_functions(benchmark_name)
 
     print(f"\n{'=' * 30}Starting benchmark '{benchmark_name}'{'=' * 30}\n")
