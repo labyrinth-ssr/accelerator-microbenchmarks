@@ -1,6 +1,7 @@
 benchmarks:
   # Example 1: Sweep matrix sizes for add operation
   - benchmark_name: "add"
+    num_runs: 100
     benchmark_sweep_params:
       - {
           m_range: { start: 1024, end: 8192, multiplier: 2 },
@@ -9,46 +10,54 @@ benchmarks:
         }
     trace_dir: "../data/vpu-microbench/add"
     xlml_metrics_dir: "../data/vpu-microbench/add"
-    csv_path: "../data/microbenchmarks/binary_ops_sweep"
-    xla_dump_dir: "../data/microbenchmarks/binary_ops_sweep/hlo_graphs"
+    csv_path: "../data/vpu-microbench/add"
+    xla_dump_dir: "../data/vpu-microbench/add/hlo_graphs"
+
+  - benchmark_name: "sub"
+    num_runs: 100
+    benchmark_sweep_params:
+      - {
+          m_range: { start: 1024, end: 8192, multiplier: 2 },
+          n: "SAME_AS_m", # n will be set to the same value as m
+        }
+    trace_dir: "../data/vpu-microbench/sub"
+    xlml_metrics_dir: "../data/vpu-microbench/sub"
+    csv_path: "../data/vpu-microbench/sub"
+    xla_dump_dir: "../data/vpu-microbench/sub/hlo_graphs"
 
   # Example 2: Sweep matrix sizes for multiple binary ops using individual functions
   - benchmark_name: "mul"
+    num_runs: 100
     benchmark_sweep_params:
-      - {
-          m_range: { start: 1024, end: 4096, multiplier: 2 },
-          n: "SAME_AS_m",
-          num_runs: 10,
-        }
+      - { m_range: { start: 1024, end: 4096, multiplier: 2 }, n: "SAME_AS_m" }
     trace_dir: "../data/vpu-microbench/mul"
     xlml_metrics_dir: "../data/vpu-microbench/mul"
-    csv_path: "../data/microbenchmarks/binary_ops_sweep"
-    xla_dump_dir: "../data/microbenchmarks/binary_ops_sweep/hlo_graphs"
+    csv_path: "../data/vpu-microbench/mul"
+    xla_dump_dir: "../data/vpu-microbench/mul/hlo_graphs"
 
   - benchmark_name: "div"
+    num_runs: 100
     benchmark_sweep_params:
-      - {
-          m_range: { start: 1024, end: 4096, multiplier: 2 },
-          n: "SAME_AS_m",
-          num_runs: 10,
-        }
+      - { m_range: { start: 1024, end: 4096, multiplier: 2 }, n: "SAME_AS_m" }
     trace_dir: "../data/vpu-microbench/div"
     xlml_metrics_dir: "../data/vpu-microbench/div"
-    csv_path: "../data/microbenchmarks/binary_ops_sweep"
-    xla_dump_dir: "../data/microbenchmarks/binary_ops_sweep/hlo_graphs"
+    csv_path: "../data/vpu-microbench/div"
+    xla_dump_dir: "../data/vpu-microbench/div/hlo_graphs"
 
   - benchmark_name: "maximum"
+    num_runs: 100
     benchmark_sweep_params:
-      - { m_list: [512, 1024, 2048, 4096], n: "SAME_AS_m", num_runs: 10 }
+      - { m_list: [512, 1024, 2048, 4096], n: "SAME_AS_m" }
     trace_dir: "../data/vpu-microbench/maximum"
     xlml_metrics_dir: "../data/vpu-microbench/maximum"
-    csv_path: "../data/microbenchmarks/binary_ops_sweep"
-    xla_dump_dir: "../data/microbenchmarks/binary_ops_sweep/hlo_graphs"
+    csv_path: "../data/vpu-microbench/maximum"
+    xla_dump_dir: "../data/vpu-microbench/maximum/hlo_graphs"
 
   - benchmark_name: "minimum"
+    num_runs: 100
     benchmark_sweep_params:
-      - { m_list: [512, 1024, 2048, 4096], n: "SAME_AS_m", num_runs: 10 }
+      - { m_list: [512, 1024, 2048, 4096], n: "SAME_AS_m" }
     trace_dir: "../data/vpu-microbench/minimum"
     xlml_metrics_dir: "../data/vpu-microbench/minimum"
-    csv_path: "../data/microbenchmarks/binary_ops_sweep"
-    xla_dump_dir: "../data/microbenchmarks/binary_ops_sweep/hlo_graphs"
+    csv_path: "../data/vpu-microbench/minimum"
+    xla_dump_dir: "../data/vpu-microbench/minimum/hlo_graphs"

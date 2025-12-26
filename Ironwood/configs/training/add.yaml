@@ -6,6 +6,10 @@ benchmarks:
     xla_dump_dir: "../data/vpu-microbench/add-test/hlo_graphs"
     num_runs: 100
     benchmark_sweep_params:
+      - {
+          m_range: { start: 1024, end: 8192, multiplier: 2 },
+          n: "SAME_AS_m", # n will be set to the same value as m
+        }
       - { m: 2048, n: 7168 }
       - { m: 4096, n: 8192 }
       - { m: 128, n: 7168 }
@@ -16,8 +20,3 @@ benchmarks:
       - { m: 4096, n: 16384 }
       - { m: 256, n: 8192 }
       - { m: 2048, n: 16384 }
-      - {
-          m_range: { start: 1024, end: 8192, multiplier: 2 },
-          n: "SAME_AS_m", # n will be set to the same value as m
-          num_runs: 100,
-        }
