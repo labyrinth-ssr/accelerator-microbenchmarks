@@ -1,6 +1,6 @@
 #!/bin/bash
 
-CONFIG_NAMES=" add_bf16 add_fp8 gemm_simple quantization rmsnorm_bf16 sigmoid_bf16 sigmoid_fp8 silu_mul_bf16 silu_mul_fp8"
+CONFIG_NAMES=" add_bf16 add_fp8"
 
 for CONFIG in $CONFIG_NAMES
 do
