@@ -1,9 +1,9 @@
 benchmarks:
   - benchmark_name: "gemm_throttling"
-    trace_dir: "../data/microbenchmarks/gemm_throttling_data_gen_once_noblock"
-    csv_path: "../data/microbenchmarks/gemm_throttling_data_gen_once_noblock"
-    xlml_metrics_dir: "../data/microbenchmarks/gemm_throttling_data_gen_once_noblock"
-    xla_dump_dir: "../data/microbenchmarks/gemm_throttling_data_gen_once_noblock/hlo_graphs"
+    trace_dir: "../data/microbench-1die/gemm_throttling_data_gen_once_noblock"
+    csv_path: "../data/microbench-1die/gemm_throttling_data_gen_once_noblock"
+    xlml_metrics_dir: "../data/microbench-1die/gemm_throttling_data_gen_once_noblock"
+    xla_dump_dir: "../data/microbench-1die/gemm_throttling_data_gen_once_noblock/hlo_graphs"
     benchmark_sweep_params:
       - {
           m: 16384,

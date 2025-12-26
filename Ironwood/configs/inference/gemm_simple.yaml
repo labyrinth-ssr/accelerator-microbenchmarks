@@ -1,8 +1,8 @@
 benchmarks:
   - benchmark_name: "gemm_simple_with_dtype"
-    trace_dir: "../data/microbenchmarks/gemm_simple_inference"
-    csv_path: "../data/microbenchmarks/gemm_simple_inference"
-    xlml_metrics_dir: "../data/microbenchmarks/gemm_simple_inference"
+    trace_dir: "../data/microbench-1die/gemm_simple_inference"
+    csv_path: "../data/microbench-1die/gemm_simple_inference"
+    xlml_metrics_dir: "../data/microbench-1die/gemm_simple_inference"
     num_runs: 1000
     benchmark_sweep_params:
       - {

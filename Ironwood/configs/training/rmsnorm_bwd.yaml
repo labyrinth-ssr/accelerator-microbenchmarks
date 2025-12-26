@@ -1,9 +1,9 @@
 benchmarks:
   - benchmark_name: "rmsnorm_bwd"
-    trace_dir: "../data/microbenchmarks/rmsnorm_bwd"
-    csv_path: "../data/microbenchmarks/rmsnorm_bwd"
-    xlml_metrics_dir: "../data/microbenchmarks/rmsnorm_bwd"
-    xla_dump_dir: "../data/microbenchmarks/rmsnorm_bwd/hlo_graphs"
+    trace_dir: "../data/microbench-1die/rmsnorm_bwd"
+    csv_path: "../data/microbench-1die/rmsnorm_bwd"
+    xlml_metrics_dir: "../data/microbench-1die/rmsnorm_bwd"
+    xla_dump_dir: "../data/microbench-1die/rmsnorm_bwd/hlo_graphs"
     num_runs: 100
     benchmark_sweep_params:
       - { m: 2048, n: 7168 }

@@ -929,3 +929,190 @@ def nextafter(
 
 def nextafter_calculate_metrics(m: int, n: int, time_ms_list: list[float]) -> Dict[str, Any]:
     return _binary_op_calculate_metrics(m, n, time_ms_list)
+
+
+# Unary operations dictionary
+unary_ops = {
+    # Basic arithmetic
+    "neg": lax.neg,
+    "abs": lax.abs,
+    "sign": lax.sign,
+
+    # Square roots
+    "sqrt": lax.sqrt,
+    "rsqrt": lax.rsqrt,
+    "cbrt": lax.cbrt,
+
+    # Exponentials and logarithms
+    "exp": lax.exp,
+    "exp2": lax.exp2,
+    "expm1": lax.expm1,
+    "log": lax.log,
+    "log1p": lax.log1p,
+
+    # Trigonometric
+    "sin": lax.sin,
+    "cos": lax.cos,
+    "tan": lax.tan,
+    "asin": lax.asin,
+    "acos": lax.acos,
+    "atan": lax.atan,
+
+    # Hyperbolic
+    "sinh": lax.sinh,
+    "cosh": lax.cosh,
+    "tanh": lax.tanh,
+    "asinh": lax.asinh,
+    "acosh": lax.acosh,
+    "atanh": lax.atanh,
+
+    # Special functions
+    "erf": lax.erf,
+    "erfc": lax.erfc,
+    "erf_inv": lax.erf_inv,
+    "logistic": lax.logistic,  # sigmoid
+
+    # Rounding
+    "ceil": lax.ceil,
+    "floor": lax.floor,
+    "round": lax.round,
+
+    # Reciprocal
+    "reciprocal": lambda x: lax.div(lax.full_like(x, 1.0), x),
+
+    # Special math functions
+    "lgamma": lax.lgamma,
+    "digamma": lax.digamma,
+    "bessel_i0e": lax.bessel_i0e,
+    "bessel_i1e": lax.bessel_i1e,
+}
+
+
+def unary_op(
+    op_name: str,
+    m: int,
+    n: int,
+    num_runs: int = 1,
+    trace_dir: str = None,
+) -> Dict[str, Any]:
+    """
+    Generic unary operation benchmark that can run any operation from unary_ops.
+
+    Args:
+        op_name: Name of the operation (e.g., "sin", "cos", "exp", etc.)
+        m: First dimension of the matrix
+        n: Second dimension of the matrix
+        num_runs: Number of runs for benchmarking
+        trace_dir: Directory to save traces
+
+    Returns:
+        Dictionary with timing results
+
+    Example:
+        # Run all unary operations
+        ops_to_run = ["sin", "cos", "exp", "log", "sqrt"]
+        for op in ops_to_run:
+            result = unary_op(op, m=1024, n=1024, num_runs=10)
+            print(f"{op}: {result}")
+    """
+    if op_name not in unary_ops:
+        raise ValueError(
+            f"Unknown operation '{op_name}'. Available operations: {list(unary_ops.keys())}"
+        )
+
+    op_fn = unary_ops[op_name]
+    return _unary_op_benchmark(m, n, op_fn, op_name, num_runs, trace_dir)
+
+
+def unary_op_calculate_metrics(
+    m: int, n: int, time_ms_list: list[float]
+) -> Dict[str, Any]:
+    """Generic metrics calculation for any unary operation."""
+    return _unary_op_calculate_metrics(m, n, time_ms_list)
+
+
+def _unary_op_benchmark(
+    m: int,
+    n: int,
+    op_fn: Callable,
+    op_name: str,
+    num_runs: int = 1,
+    trace_dir: str = None,
+) -> Dict[str, Any]:
+    """
+    Generic unary operation benchmark.
+    Y = op_fn(X)
+    """
+
+    def f(x):
+        with jax.named_scope(MARKER):
+            return op_fn(x)
+
+    mesh = create_mesh(SHARDING_STRATEGY)
+    x_sharding = get_output_named_shading(mesh, SHARDING_STRATEGY)
+    out_sharding = get_out_sharding(SHARDING_STRATEGY)
+    jit_sharded_f = jax.jit(
+        shard_map(
+            f,
+            mesh,
+            in_specs=x_sharding.spec,
+            out_specs=out_sharding,
+            check_rep=False,
+        )
+    )
+    x_shape = (m, n)
+    x_dtype = jnp.bfloat16
+
+    key = jax.random.key(SEED)
+
+    def data_generator():
+        """Creates new random data on host and puts it on device."""
+        nonlocal key
+        key, k1 = jax.random.split(key)
+
+        x_host = jax.random.normal(k1, x_shape).astype(x_dtype)
+        x_device = jax.device_put(x_host, x_sharding)
+
+        return (x_device,)
+
+    time_ms_list = iteration_timeit(
+        jit_sharded_f,
+        data_generator,
+        matrix_dim=f"{m}x{n}",
+        tries=num_runs,
+        task=op_name,
+        trace_dir=trace_dir,
+    )
+    return {"time_ms_list": time_ms_list}
+
+
+def _unary_op_calculate_metrics(
+    m: int, n: int, time_ms_list: list[float]
+) -> Dict[str, Any]:
+    """Generic metrics calculation for unary operations."""
+    # Read input (2 bytes) + Write output (2 bytes) = 4 bytes per element
+    total_bytes = 4 * m * n
+    total_bytes, total_bytes_all_devices = handle_based_on_sharding(
+        total_bytes, SHARDING_STRATEGY
+    )
+    return unified_bytes_metrics(
+        m, n, time_ms_list, total_bytes, total_bytes_all_devices
+    )
+
+
+# Generate individual functions for each unary operation
+for _op_name in unary_ops:
+    # Create the benchmark function
+    exec(f"""
+def {_op_name}(
+    m: int,
+    n: int,
+    num_runs: int = 1,
+    trace_dir: str = None,
+) -> Dict[str, Any]:
+    '''Y = {_op_name}(X)'''
+    return _unary_op_benchmark(m, n, unary_ops["{_op_name}"], "{_op_name}", num_runs, trace_dir)
+
+def {_op_name}_calculate_metrics(m: int, n: int, time_ms_list: list[float]) -> Dict[str, Any]:
+    return _unary_op_calculate_metrics(m, n, time_ms_list)
+""")

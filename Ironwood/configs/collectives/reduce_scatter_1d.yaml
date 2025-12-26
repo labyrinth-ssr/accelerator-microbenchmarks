@@ -19,7 +19,7 @@ benchmarks:
           op_dimension: 1,
           num_runs: 5,
         } # Non-Parallel Replica
-    trace_dir: "../data/microbenchmarks/reduce_scatter_1d"
-    csv_path: "../data/microbenchmarks/reduce_scatter_1d"
-    xlml_metrics_dir: "../data/microbenchmarks/reduce_scatter_1d"
-    xla_dump_dir: "../data/microbenchmarks/reduce_scatter_1d/hlo_graphs"
+    trace_dir: "../data/microbench-1die/reduce_scatter_1d"
+    csv_path: "../data/microbench-1die/reduce_scatter_1d"
+    xlml_metrics_dir: "../data/microbench-1die/reduce_scatter_1d"
+    xla_dump_dir: "../data/microbench-1die/reduce_scatter_1d/hlo_graphs"

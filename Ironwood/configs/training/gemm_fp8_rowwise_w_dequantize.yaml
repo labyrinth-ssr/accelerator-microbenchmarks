@@ -1,9 +1,9 @@
 benchmarks:
   - benchmark_name: "gemm_fp8_rowwise_w_dequantize"
-    trace_dir: "../data/microbenchmarks/gemm_fp8_rowwise_w_dequantize"
-    csv_path: "../data/microbenchmarks/gemm_fp8_rowwise_w_dequantize"
-    xlml_metrics_dir: "../data/microbenchmarks/gemm_fp8_rowwise_w_dequantize"
-    xla_dump_dir: "../data/microbenchmarks/gemm_fp8_rowwise_w_dequantize/hlo_graphs"
+    trace_dir: "../data/microbench-1die/gemm_fp8_rowwise_w_dequantize"
+    csv_path: "../data/microbench-1die/gemm_fp8_rowwise_w_dequantize"
+    xlml_metrics_dir: "../data/microbench-1die/gemm_fp8_rowwise_w_dequantize"
+    xla_dump_dir: "../data/microbench-1die/gemm_fp8_rowwise_w_dequantize/hlo_graphs"
     num_runs: 100
     benchmark_sweep_params:
       - { m: 16384, k: 16384, n: 4096 }

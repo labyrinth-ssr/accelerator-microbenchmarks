@@ -7,7 +7,7 @@ benchmarks:
           dtype: "bfloat16",
           num_runs: 1,
         }
-    trace_dir: "../data/microbenchmarks/hbm"
-    csv_path: "../data/microbenchmarks/hbm"
-    xlml_metrics_dir: "../data/microbenchmarks/hbm"
-    xla_dump_dir: "../data/microbenchmarks/hbm/hlo_graphs"
+    trace_dir: "../data/microbench-1die/hbm"
+    csv_path: "../data/microbench-1die/hbm"
+    xlml_metrics_dir: "../data/microbench-1die/hbm"
+    xla_dump_dir: "../data/microbench-1die/hbm/hlo_graphs"

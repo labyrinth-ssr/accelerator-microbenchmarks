@@ -10,7 +10,7 @@ benchmarks:
           op_dimension: 3,
           num_runs: 5,
         } # Non Parallel Replica Groups
-    trace_dir: "../data/microbenchmarks/all_to_all_3d"
-    csv_path: "../data/microbenchmarks/all_to_all_3d"
-    xlml_metrics_dir: "../data/microbenchmarks/all_to_all_3d"
-    xla_dump_dir: "../data/microbenchmarks/all_to_all_3d/hlo_graphs"
+    trace_dir: "../data/microbench-1die/all_to_all_3d"
+    csv_path: "../data/microbench-1die/all_to_all_3d"
+    xlml_metrics_dir: "../data/microbench-1die/all_to_all_3d"
+    xla_dump_dir: "../data/microbench-1die/all_to_all_3d/hlo_graphs"

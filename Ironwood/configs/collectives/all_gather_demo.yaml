@@ -51,7 +51,7 @@ benchmarks:
         } # Non Parallel Replica Groups
 
     warmup_tries: 10
-    trace_dir: "../data/microbenchmarks/all_gather_demo"
-    csv_path: "../data/microbenchmarks/all_gather_demo"
-    xlml_metrics_dir: "../data/microbenchmarks/all_gather_demo"
-    xla_dump_dir: "../data/microbenchmarks/all_gather_demo/hlo_graphs"
+    trace_dir: "../data/microbench-1die/all_gather_demo"
+    csv_path: "../data/microbench-1die/all_gather_demo"
+    xlml_metrics_dir: "../data/microbench-1die/all_gather_demo"
+    xla_dump_dir: "../data/microbench-1die/all_gather_demo/hlo_graphs"

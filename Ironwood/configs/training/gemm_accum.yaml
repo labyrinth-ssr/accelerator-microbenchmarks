@@ -1,9 +1,9 @@
 benchmarks:
   - benchmark_name: "gemm_accum"
-    trace_dir: "../data/microbenchmarks/gemm_accum"
-    csv_path: "../data/microbenchmarks/gemm_accum"
-    xlml_metrics_dir: "../data/microbenchmarks/gemm_accum"
-    xla_dump_dir: "../data/microbenchmarks/gemm_accum/hlo_graphs"
+    trace_dir: "../data/microbench-1die/gemm_accum"
+    csv_path: "../data/microbench-1die/gemm_accum"
+    xlml_metrics_dir: "../data/microbench-1die/gemm_accum"
+    xla_dump_dir: "../data/microbench-1die/gemm_accum/hlo_graphs"
     num_runs: 100
     benchmark_sweep_params:
       - { m: 16384, k: 2048, n: 18432 }

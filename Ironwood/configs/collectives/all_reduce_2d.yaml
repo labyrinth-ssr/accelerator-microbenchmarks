@@ -19,7 +19,7 @@ benchmarks:
           op_dimension: 2,
           num_runs: 5,
         } # Non Parallel Replica Groups
-    trace_dir: "../data/microbenchmarks/all_reduce_2d"
-    csv_path: "../data/microbenchmarks/all_reduce_2d"
-    xlml_metrics_dir: "../data/microbenchmarks/all_reduce_2d"
-    xla_dump_dir: "../data/microbenchmarks/all_reduce_2d/hlo_graphs"
+    trace_dir: "../data/microbench-1die/all_reduce_2d"
+    csv_path: "../data/microbench-1die/all_reduce_2d"
+    xlml_metrics_dir: "../data/microbench-1die/all_reduce_2d"
+    xla_dump_dir: "../data/microbench-1die/all_reduce_2d/hlo_graphs"

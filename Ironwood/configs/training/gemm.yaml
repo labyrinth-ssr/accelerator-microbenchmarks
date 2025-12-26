@@ -1,9 +1,9 @@
 benchmarks:
   - benchmark_name: "gemm"
-    trace_dir: "../data/microbenchmarks/gemm"
-    csv_path: "../data/microbenchmarks/gemm"
-    xlml_metrics_dir: "../data/microbenchmarks/gemm"
-    xla_dump_dir: "../data/microbenchmarks/gemm/hlo_graphs"
+    trace_dir: "../data/microbench-1die/gemm"
+    csv_path: "../data/microbench-1die/gemm"
+    xlml_metrics_dir: "../data/microbench-1die/gemm"
+    xla_dump_dir: "../data/microbench-1die/gemm/hlo_graphs"
     num_runs: 100
     benchmark_sweep_params:
       - { m: 1024, k: 7168, n: 3584 }

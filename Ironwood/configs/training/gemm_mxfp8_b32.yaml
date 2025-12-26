@@ -1,9 +1,9 @@
 benchmarks:
   - benchmark_name: "gemm_mxfp8_b32"
-    trace_dir: "../data/microbenchmarks/gemm_mxfp8_b32"
-    csv_path: "../data/microbenchmarks/gemm_mxfp8_b32"
-    xlml_metrics_dir: "../data/microbenchmarks/gemm_mxfp8_b32"
-    xla_dump_dir: "../data/microbenchmarks/gemm_mxfp8_b32/hlo_graphs"
+    trace_dir: "../data/microbench-1die/gemm_mxfp8_b32"
+    csv_path: "../data/microbench-1die/gemm_mxfp8_b32"
+    xlml_metrics_dir: "../data/microbench-1die/gemm_mxfp8_b32"
+    xla_dump_dir: "../data/microbench-1die/gemm_mxfp8_b32/hlo_graphs"
     num_runs: 100
     benchmark_sweep_params:
       - { m: 16384, k: 16384, n: 4096 }

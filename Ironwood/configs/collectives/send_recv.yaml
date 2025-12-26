@@ -30,7 +30,7 @@ benchmarks:
           dtype: "float32",
         } ## over die to die
 
-    trace_dir: "../data/microbenchmarks/p2p"
-    csv_path: "../data/microbenchmarks/p2p"
-    xlml_metrics_dir: "../data/microbenchmarks/p2p"
-    xla_dump_dir: "../data/microbenchmarks/p2p/hlo_graphs"
+    trace_dir: "../data/microbench-1die/p2p"
+    csv_path: "../data/microbench-1die/p2p"
+    xlml_metrics_dir: "../data/microbench-1die/p2p"
+    xla_dump_dir: "../data/microbench-1die/p2p/hlo_graphs"
