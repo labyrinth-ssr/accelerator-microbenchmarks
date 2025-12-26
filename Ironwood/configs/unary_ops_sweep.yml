@@ -1,0 +1,195 @@
+# Unary operations - Exponentials and logarithms
+- benchmark_name: "exp"
+  num_runs: 100
+  benchmark_sweep_params:
+    - { m_range: { start: 1024, end: 8192, multiplier: 2 }, n: "SAME_AS_m" }
+  trace_dir: "../data/vpu-unary/exp"
+  xlml_metrics_dir: "../data/vpu-unary/exp"
+  csv_path: "../data/vpu-unary/exp"
+  xla_dump_dir: "../data/vpu-unary/exp/hlo_graphs"
+
+- benchmark_name: "log"
+  num_runs: 100
+  benchmark_sweep_params:
+    - { m_range: { start: 1024, end: 8192, multiplier: 2 }, n: "SAME_AS_m" }
+  trace_dir: "../data/vpu-unary/log"
+  xlml_metrics_dir: "../data/vpu-unary/log"
+  csv_path: "../data/vpu-unary/log"
+  xla_dump_dir: "../data/vpu-unary/log/hlo_graphs"
+
+- benchmark_name: "exp2"
+  num_runs: 100
+  benchmark_sweep_params:
+    - { m_range: { start: 1024, end: 8192, multiplier: 2 }, n: "SAME_AS_m" }
+  trace_dir: "../data/vpu-unary/exp2"
+  xlml_metrics_dir: "../data/vpu-unary/exp2"
+  csv_path: "../data/vpu-unary/exp2"
+  xla_dump_dir: "../data/vpu-unary/exp2/hlo_graphs"
+
+- benchmark_name: "expm1"
+  num_runs: 100
+  benchmark_sweep_params:
+    - { m_range: { start: 1024, end: 8192, multiplier: 2 }, n: "SAME_AS_m" }
+  trace_dir: "../data/vpu-unary/expm1"
+  xlml_metrics_dir: "../data/vpu-unary/expm1"
+  csv_path: "../data/vpu-unary/expm1"
+  xla_dump_dir: "../data/vpu-unary/expm1/hlo_graphs"
+
+- benchmark_name: "log1p"
+  num_runs: 100
+  benchmark_sweep_params:
+    - { m_range: { start: 1024, end: 8192, multiplier: 2 }, n: "SAME_AS_m" }
+  trace_dir: "../data/vpu-unary/log1p"
+  xlml_metrics_dir: "../data/vpu-unary/log1p"
+  csv_path: "../data/vpu-unary/log1p"
+  xla_dump_dir: "../data/vpu-unary/log1p/hlo_graphs"
+
+# Unary operations - Trigonometric
+- benchmark_name: "sin"
+  num_runs: 100
+  benchmark_sweep_params:
+    - { m_range: { start: 1024, end: 8192, multiplier: 2 }, n: "SAME_AS_m" }
+  trace_dir: "../data/vpu-unary/sin"
+  xlml_metrics_dir: "../data/vpu-unary/sin"
+  csv_path: "../data/vpu-unary/sin"
+  xla_dump_dir: "../data/vpu-unary/sin/hlo_graphs"
+
+- benchmark_name: "cos"
+  num_runs: 100
+  benchmark_sweep_params:
+    - { m_range: { start: 1024, end: 8192, multiplier: 2 }, n: "SAME_AS_m" }
+  trace_dir: "../data/vpu-unary/cos"
+  xlml_metrics_dir: "../data/vpu-unary/cos"
+  csv_path: "../data/vpu-unary/cos"
+  xla_dump_dir: "../data/vpu-unary/cos/hlo_graphs"
+
+- benchmark_name: "tan"
+  num_runs: 100
+  benchmark_sweep_params:
+    - { m_range: { start: 1024, end: 8192, multiplier: 2 }, n: "SAME_AS_m" }
+  trace_dir: "../data/vpu-unary/tan"
+  xlml_metrics_dir: "../data/vpu-unary/tan"
+  csv_path: "../data/vpu-unary/tan"
+  xla_dump_dir: "../data/vpu-unary/tan/hlo_graphs"
+
+# Unary operations - Square roots
+- benchmark_name: "sqrt"
+  num_runs: 100
+  benchmark_sweep_params:
+    - { m_range: { start: 1024, end: 8192, multiplier: 2 }, n: "SAME_AS_m" }
+  trace_dir: "../data/vpu-unary/sqrt"
+  xlml_metrics_dir: "../data/vpu-unary/sqrt"
+  csv_path: "../data/vpu-unary/sqrt"
+  xla_dump_dir: "../data/vpu-unary/sqrt/hlo_graphs"
+
+- benchmark_name: "rsqrt"
+  num_runs: 100
+  benchmark_sweep_params:
+    - { m_range: { start: 1024, end: 8192, multiplier: 2 }, n: "SAME_AS_m" }
+  trace_dir: "../data/vpu-unary/rsqrt"
+  xlml_metrics_dir: "../data/vpu-unary/rsqrt"
+  csv_path: "../data/vpu-unary/rsqrt"
+  xla_dump_dir: "../data/vpu-unary/rsqrt/hlo_graphs"
+
+- benchmark_name: "cbrt"
+  num_runs: 100
+  benchmark_sweep_params:
+    - { m_range: { start: 1024, end: 8192, multiplier: 2 }, n: "SAME_AS_m" }
+  trace_dir: "../data/vpu-unary/cbrt"
+  xlml_metrics_dir: "../data/vpu-unary/cbrt"
+  csv_path: "../data/vpu-unary/cbrt"
+  xla_dump_dir: "../data/vpu-unary/cbrt/hlo_graphs"
+
+# Unary operations - Hyperbolic
+- benchmark_name: "tanh"
+  num_runs: 100
+  benchmark_sweep_params:
+    - { m_range: { start: 1024, end: 8192, multiplier: 2 }, n: "SAME_AS_m" }
+  trace_dir: "../data/vpu-unary/tanh"
+  xlml_metrics_dir: "../data/vpu-unary/tanh"
+  csv_path: "../data/vpu-unary/tanh"
+  xla_dump_dir: "../data/vpu-unary/tanh/hlo_graphs"
+
+- benchmark_name: "sinh"
+  num_runs: 100
+  benchmark_sweep_params:
+    - { m_range: { start: 1024, end: 8192, multiplier: 2 }, n: "SAME_AS_m" }
+  trace_dir: "../data/vpu-unary/sinh"
+  xlml_metrics_dir: "../data/vpu-unary/sinh"
+  csv_path: "../data/vpu-unary/sinh"
+  xla_dump_dir: "../data/vpu-unary/sinh/hlo_graphs"
+
+- benchmark_name: "cosh"
+  num_runs: 100
+  benchmark_sweep_params:
+    - { m_range: { start: 1024, end: 8192, multiplier: 2 }, n: "SAME_AS_m" }
+  trace_dir: "../data/vpu-unary/cosh"
+  xlml_metrics_dir: "../data/vpu-unary/cosh"
+  csv_path: "../data/vpu-unary/cosh"
+  xla_dump_dir: "../data/vpu-unary/cosh/hlo_graphs"
+
+# Unary operations - Special functions
+- benchmark_name: "erf"
+  num_runs: 100
+  benchmark_sweep_params:
+    - { m_range: { start: 1024, end: 8192, multiplier: 2 }, n: "SAME_AS_m" }
+  trace_dir: "../data/vpu-unary/erf"
+  xlml_metrics_dir: "../data/vpu-unary/erf"
+  csv_path: "../data/vpu-unary/erf"
+  xla_dump_dir: "../data/vpu-unary/erf/hlo_graphs"
+
+- benchmark_name: "logistic"
+  num_runs: 100
+  benchmark_sweep_params:
+    - { m_range: { start: 1024, end: 8192, multiplier: 2 }, n: "SAME_AS_m" }
+  trace_dir: "../data/vpu-unary/logistic"
+  xlml_metrics_dir: "../data/vpu-unary/logistic"
+  csv_path: "../data/vpu-unary/logistic"
+  xla_dump_dir: "../data/vpu-unary/logistic/hlo_graphs"
+
+# Unary operations - Basic arithmetic
+- benchmark_name: "neg"
+  num_runs: 100
+  benchmark_sweep_params:
+    - { m_range: { start: 1024, end: 8192, multiplier: 2 }, n: "SAME_AS_m" }
+  trace_dir: "../data/vpu-unary/neg"
+  xlml_metrics_dir: "../data/vpu-unary/neg"
+  csv_path: "../data/vpu-unary/neg"
+  xla_dump_dir: "../data/vpu-unary/neg/hlo_graphs"
+
+- benchmark_name: "abs"
+  num_runs: 100
+  benchmark_sweep_params:
+    - { m_range: { start: 1024, end: 8192, multiplier: 2 }, n: "SAME_AS_m" }
+  trace_dir: "../data/vpu-unary/abs"
+  xlml_metrics_dir: "../data/vpu-unary/abs"
+  csv_path: "../data/vpu-unary/abs"
+  xla_dump_dir: "../data/vpu-unary/abs/hlo_graphs"
+
+- benchmark_name: "reciprocal"
+  num_runs: 100
+  benchmark_sweep_params:
+    - { m_range: { start: 1024, end: 8192, multiplier: 2 }, n: "SAME_AS_m" }
+  trace_dir: "../data/vpu-unary/reciprocal"
+  xlml_metrics_dir: "../data/vpu-unary/reciprocal"
+  csv_path: "../data/vpu-unary/reciprocal"
+  xla_dump_dir: "../data/vpu-unary/reciprocal/hlo_graphs"
+
+# Unary operations - Rounding
+- benchmark_name: "ceil"
+  num_runs: 100
+  benchmark_sweep_params:
+    - { m_range: { start: 1024, end: 8192, multiplier: 2 }, n: "SAME_AS_m" }
+  trace_dir: "../data/vpu-unary/ceil"
+  xlml_metrics_dir: "../data/vpu-unary/ceil"
+  csv_path: "../data/vpu-unary/ceil"
+  xla_dump_dir: "../data/vpu-unary/ceil/hlo_graphs"
+
+- benchmark_name: "floor"
+  num_runs: 100
+  benchmark_sweep_params:
+    - { m_range: { start: 1024, end: 8192, multiplier: 2 }, n: "SAME_AS_m" }
+  trace_dir: "../data/vpu-unary/floor"
+  xlml_metrics_dir: "../data/vpu-unary/floor"
+  csv_path: "../data/vpu-unary/floor"
+  xla_dump_dir: "../data/vpu-unary/floor/hlo_graphs"
