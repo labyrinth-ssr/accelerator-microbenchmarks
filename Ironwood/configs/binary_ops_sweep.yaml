@@ -6,7 +6,6 @@ benchmarks:
       - {
           m_range: { start: 1024, end: 8192, multiplier: 2 },
           n: "SAME_AS_m", # n will be set to the same value as m
-          num_runs: 100,
         }
     trace_dir: "../data/vpu-microbench/add"
     xlml_metrics_dir: "../data/vpu-microbench/add"
@@ -61,3 +60,21 @@ benchmarks:
     xlml_metrics_dir: "../data/vpu-microbench/minimum"
     csv_path: "../data/vpu-microbench/minimum"
     xla_dump_dir: "../data/vpu-microbench/minimum/hlo_graphs"
+
+  - benchmark_name: "atan2"
+    num_runs: 100
+    benchmark_sweep_params:
+      - { m_range: { start: 1024, end: 8192, multiplier: 2 }, n: "SAME_AS_m" }
+    trace_dir: "../data/vpu-microbench/atan2"
+    xlml_metrics_dir: "../data/vpu-microbench/atan2"
+    csv_path: "../data/vpu-microbench/atan2"
+    xla_dump_dir: "../data/vpu-microbench/atan2/hlo_graphs"
+
+  - benchmark_name: "nextafter"
+    num_runs: 100
+    benchmark_sweep_params:
+      - { m_range: { start: 1024, end: 8192, multiplier: 2 }, n: "SAME_AS_m" }
+    trace_dir: "../data/vpu-microbench/nextafter"
+    xlml_metrics_dir: "../data/vpu-microbench/nextafter"
+    csv_path: "../data/vpu-microbench/nextafter"
+    xla_dump_dir: "../data/vpu-microbench/nextafter/hlo_graphs"
