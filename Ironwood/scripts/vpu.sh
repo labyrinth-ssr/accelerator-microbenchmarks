@@ -1,7 +1,6 @@
 #!/bin/bash
 
-CONFIG_NAMES=" add quantization transpose_quantization quantization_static_scaling transpose_quantization_static_scaling swiglu_fwd rmsnorm_fwd "
-CONFIG_NAMES="swiglu_fwd"
+CONFIG_NAMES="attention quantization transpose_quantization quantization_static_scaling transpose_quantization_static_scaling swiglu_fwd"
 
 for CONFIG in $CONFIG_NAMES
 do
