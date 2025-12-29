@@ -2,7 +2,7 @@ benchmarks:
   - benchmark_name: all_to_all
     benchmark_sweep_params:
       - {
-          matrix_dim_range: { start: 256, end: 8192, multiplier: 2 },
+          matrix_dim_range: { start: 256, end: 32768, multiplier: 2 },
           dtype: "float32",
           op_dimension: 1,
           num_runs: 5,
@@ -10,7 +10,7 @@ benchmarks:
           ici_size: 8,
           sharding_strategy: "2x2x2", # Only d_0 (2-way)
         }
-    trace_dir: "../data/microbench-1die/all_to_all_3d"
-    csv_path: "../data/microbench-1die/all_to_all_3d"
-    xlml_metrics_dir: "../data/microbench-1die/all_to_all_3d"
-    xla_dump_dir: "../data/microbench-1die/all_to_all_3d/hlo_graphs"
+    trace_dir: "../data/collectives/all_to_all_3d"
+    csv_path: "../data/collectives/all_to_all_3d"
+    xlml_metrics_dir: "../data/collectives/all_to_all_3d"
+    xla_dump_dir: "../data/collectives/all_to_all_3d/hlo_graphs"

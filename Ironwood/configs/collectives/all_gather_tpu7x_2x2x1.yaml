@@ -21,7 +21,7 @@ benchmarks:
         } # Non-Parallel Replica
 
     warmup_tries: 10
-    trace_dir: "../data/microbench-1die/all_gather"
-    csv_path: "../data/microbench-1die/all_gather"
-    xlml_metrics_dir: "../data/microbench-1die/all_gather"
-    xla_dump_dir: "../data/microbench-1die/all_gather/hlo_graphs"
+    trace_dir: "../data/collectives/all_gather"
+    csv_path: "../data/collectives/all_gather"
+    xlml_metrics_dir: "../data/collectives/all_gather"
+    xla_dump_dir: "../data/collectives/all_gather/hlo_graphs"
