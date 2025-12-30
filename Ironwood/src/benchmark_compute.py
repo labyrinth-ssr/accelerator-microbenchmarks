@@ -164,8 +164,8 @@ def quantization_calculate_metrics(
     output_flops_based_on_dtype = m * n * width_in_bytes
     #       calculate scale     apply quant    write quant output       write scale factor
     # NOTE: (2 * m * n)     +  (2 * m * n)   + (1 * m * n)          +      (4 * m)
-    # total_bytes = (2 * m * n) + (2 * m * n) + (4 * m) + output_flops_based_on_dtype
-    total_bytes = 3*m*n + 8*m
+    total_bytes = (2 * m * n) + (2 * m * n) + (4 * m) + output_flops_based_on_dtype
+    # total_bytes = 3*m*n + 8*m
     total_bytes, total_bytes_all_devices = handle_based_on_sharding(
         total_bytes, SHARDING_STRATEGY
     )
@@ -206,7 +206,7 @@ def quantization_static_scaling(
 def quantization_static_scaling_calculate_metrics(
     m: int, n: int, time_ms_list: list[float]
 ) -> Dict[str, Any]:
-    total_bytes = 3 * m * n + 4  # Total floating-point operations
+    total_bytes = 3 * m * n + 4 * m  # Total floating-point operations
     total_bytes, total_bytes_all_devices = handle_based_on_sharding(
         total_bytes, SHARDING_STRATEGY
     )
