@@ -17,7 +17,7 @@ os.environ["LIBTPU_INIT_ARGS"] = (
     "--xla_tpu_scoped_vmem_limit_kib=65536 "
     "--xla_jf_bounds_check=false "
     "--xla_tpu_dvfs_p_state=7 "
-    "--xla_jf_dump_to=/data/llo/hbm"
+    "--xla_jf_dump_to=/data/llo/"
 )
 
 def get_metrics_helper(
