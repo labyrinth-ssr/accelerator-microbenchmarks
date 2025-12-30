@@ -1187,7 +1187,7 @@ def top_k(
 
 
 def top_k_calculate_metrics(
-    m: int, n: int, k: int, time_ms_list: list[float]
+    m: int, n: int, time_ms_list: list[float], k: int = 10
 ) -> Dict[str, Any]:
     """
     Metrics calculation for top_k operation.
