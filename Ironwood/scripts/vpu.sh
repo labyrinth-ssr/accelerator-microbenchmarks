@@ -1,6 +1,6 @@
 #!/bin/bash
 
-CONFIG_NAMES="quantization transpose_quantization quantization_static_scaling transpose_quantization_static_scaling swiglu_fwd"
+CONFIG_NAMES="quantization quantization_static_scaling"
 
 for CONFIG in $CONFIG_NAMES
 do
