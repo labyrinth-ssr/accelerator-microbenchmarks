@@ -76,6 +76,7 @@ COMPUTE_BENCHMARK_MAP = {
     "rmsnorm_fwd": "benchmark_compute.rmsnorm_fwd",
     "rmsnorm_bwd": "benchmark_compute.rmsnorm_bwd",
     "add": "benchmark_compute.add",
+    "top_k": "benchmark_compute.top_k",
     "sub": "benchmark_compute.sub",
     "mul": "benchmark_compute.mul",
     "div": "benchmark_compute.div",

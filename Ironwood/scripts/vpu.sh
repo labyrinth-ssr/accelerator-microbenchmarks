@@ -1,6 +1,6 @@
 #!/bin/bash
 
-CONFIG_NAMES="quantization quantization_static_scaling"
+CONFIG_NAMES="top_k"
 
 for CONFIG in $CONFIG_NAMES
 do

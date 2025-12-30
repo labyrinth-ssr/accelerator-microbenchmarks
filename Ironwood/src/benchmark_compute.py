@@ -19,6 +19,7 @@ Considered ops:
 16. minimum
 17. atan2
 18. nextafter
+19. top_k
 """
 
 import os
@@ -1117,3 +1118,89 @@ def {_op_name}(
 def {_op_name}_calculate_metrics(m: int, n: int, time_ms_list: list[float]) -> Dict[str, Any]:
     return _unary_op_calculate_metrics(m, n, time_ms_list)
 """)
+
+
+def top_k(
+    m: int,
+    n: int,
+    k: int = 10,
+    num_runs: int = 1,
+    trace_dir: str = None,
+) -> Dict[str, Any]:
+    """
+    (Values, Indices) = top_k(X, k)
+    Returns the k largest elements and their indices along the last axis.
+
+    Args:
+        m: First dimension of the matrix
+        n: Second dimension of the matrix
+        k: Number of top elements to return (default 10)
+        num_runs: Number of runs for benchmarking
+        trace_dir: Directory to save traces
+
+    Returns:
+        Dictionary with timing results
+    """
+
+    def f(x):
+        with jax.named_scope(MARKER):
+            return lax.top_k(x, k)
+
+    mesh = create_mesh(SHARDING_STRATEGY)
+    x_sharding = get_rowwise_named_shading(mesh, SHARDING_STRATEGY)
+    out_values_sharding = get_rowwise_named_shading(mesh, SHARDING_STRATEGY)
+    out_indices_sharding = get_rowwise_named_shading(mesh, SHARDING_STRATEGY)
+
+    jit_sharded_f = jax.jit(
+        shard_map(
+            f,
+            mesh,
+            in_specs=x_sharding.spec,
+            out_specs=(out_values_sharding.spec, out_indices_sharding.spec),
+            check_rep=False,
+        )
+    )
+
+    x_shape = (m, n)
+    x_dtype = jnp.bfloat16
+
+    key = jax.random.key(SEED)
+
+    def data_generator():
+        """Creates new random data on host and puts it on device."""
+        nonlocal key
+        key, k1 = jax.random.split(key)
+        x_host = jax.random.normal(k1, x_shape).astype(x_dtype)
+        x_device = jax.device_put(x_host, x_sharding)
+        return (x_device,)
+
+    time_ms_list = iteration_timeit(
+        jit_sharded_f,
+        data_generator,
+        matrix_dim=f"{m}x{n}_k{k}",
+        tries=num_runs,
+        task="top_k",
+        trace_dir=trace_dir,
+    )
+    return {"time_ms_list": time_ms_list}
+
+
+def top_k_calculate_metrics(
+    m: int, n: int, k: int, time_ms_list: list[float]
+) -> Dict[str, Any]:
+    """
+    Metrics calculation for top_k operation.
+
+    Memory access pattern:
+    - Read input: m * n elements (2 bytes each for bfloat16)
+    - Write output values: m * k elements (2 bytes each)
+    - Write output indices: m * k elements (4 bytes each for int32)
+    """
+    # Read input + write values + write indices
+    total_bytes = (2 * m * n) + (2 * m * k) + (4 * m * k)
+    total_bytes, total_bytes_all_devices = handle_based_on_sharding(
+        total_bytes, SHARDING_STRATEGY
+    )
+    return unified_bytes_metrics(
+        m, n, time_ms_list, total_bytes, total_bytes_all_devices
+    )
