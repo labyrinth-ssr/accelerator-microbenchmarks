@@ -59,7 +59,7 @@ os.environ["LIBTPU_INIT_ARGS"] = (
     "--xla_tpu_accumulate_into_mrb=true "
     "--xla_tpu_scoped_vmem_limit_kib=65536 "
     "--xla_tpu_dvfs_p_state=7 "
-    "--xla_jf_dump_to=/data/llo/vpu"
+    "--xla_jf_dump_to=/tmp/llo/vpu"
 )
 
 TRACE_BASE_DIR = None
