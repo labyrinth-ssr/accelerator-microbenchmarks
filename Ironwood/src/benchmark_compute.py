@@ -1144,7 +1144,8 @@ def top_k(
 
     def f(x):
         with jax.named_scope(MARKER):
-            return lax.top_k(x, k)
+            values, indices = lax.top_k(x, k)
+            return (values, indices)
 
     mesh = create_mesh(SHARDING_STRATEGY)
     x_sharding = get_rowwise_named_shading(mesh, SHARDING_STRATEGY)
