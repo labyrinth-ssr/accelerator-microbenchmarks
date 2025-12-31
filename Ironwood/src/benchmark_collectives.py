@@ -49,6 +49,11 @@ def create_mesh(ici_size: int, mesh_shape: str) -> Mesh:
   print("Device kind: ", device_kind)
   print("Mesh shape: ", shape)
   mesh_devices = mesh_utils.create_device_mesh(shape, devices=jax.devices())
+  print("Mesh devices: ", mesh_devices)
+  shape = [2]
+  mesh_devices = mesh_utils.create_device_mesh(shape, devices=jax.devices()[:2])
+  axis_names = [f"d_{i}" for i in range(len(shape))]
+  print("Mesh devices: ", mesh_devices)
   mesh = Mesh(mesh_devices, axis_names)
   return mesh
 
@@ -118,7 +123,7 @@ def unified_ici_collectives_metrics(
     participating_ranks = rank - 1
     tf_multiplier = 2
   else:
-    participating_ranks = rank - 2
+    participating_ranks = rank - 1
     tf_multiplier = 1
 
   transferred_data = 0
