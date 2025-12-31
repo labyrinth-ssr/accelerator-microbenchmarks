@@ -501,6 +501,7 @@ def all_gather_benchmark(
   ]
   # libtpu_init_args=[ ]
   os.environ["LIBTPU_INIT_ARGS"] = " ".join(libtpu_init_args)
+  print("env: ", os.environ["LIBTPU_INIT_ARGS"])
   mesh = create_mesh(ici_size, mesh_shape)
 
   sharding_axis = get_sharding_axis(sharding_strategy, mesh)
