@@ -47,6 +47,7 @@ def create_mesh(ici_size: int, mesh_shape: str) -> Mesh:
   first_device = devices[0]
   device_kind = first_device.device_kind
   print("Device kind: ", device_kind)
+  print("Mesh shape: ", shape)
   mesh_devices = mesh_utils.create_device_mesh(shape, devices=jax.devices())
   mesh = Mesh(mesh_devices, axis_names)
   return mesh
@@ -126,7 +127,7 @@ def unified_ici_collectives_metrics(
         input_num_elements
         * participating_ranks
         * dtype_bytes
-        * 0.000000001
+        * 0.000001
         * tf_multiplier
     )
   elif op_type == "AR":
@@ -134,7 +135,7 @@ def unified_ici_collectives_metrics(
         input_num_elements
         * participating_ranks
         * dtype_bytes
-        * 0.000000001
+        * 0.000001
         * tf_multiplier
         * 2
         /rank
@@ -144,7 +145,7 @@ def unified_ici_collectives_metrics(
         input_num_elements
         * participating_ranks
         * dtype_bytes
-        * 0.000000001
+        * 0.000001
         * tf_multiplier
         / rank
     )
@@ -168,14 +169,14 @@ def unified_ici_collectives_metrics(
       "sharding_strategy": sharding_strategy,
       "input_num_elements": input_num_elements,
       "matrix_shape": json.dumps(f"({matrix_shape})"),
-      "transferred_data (GB)": transferred_data,
+      "transferred_data (MB)": transferred_data,
       "dtype_bytes": dtype_bytes,
       "hlo_input_shape": json.dumps(hlo_input_shape),
       "hlo_output_shape": json.dumps(hlo_output_shape),
       "hlo_replica_groups": json.dumps(hlo_replica_groups),
       "sparsecore_used": sparsecore_used,
   }
-  achieved_bw = [transferred_data*1000/my_time for my_time in ici_average_time_ms_list]
+  achieved_bw = [transferred_data/my_time for my_time in ici_average_time_ms_list]
   achieved_bw_statistics = MetricsStatistics(
         metrics_list=achieved_bw, metrics_name="achieved_bw (GB/s)"
     )

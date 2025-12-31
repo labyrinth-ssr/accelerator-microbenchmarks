@@ -447,6 +447,8 @@ def main(args):
             if os.path.isfile(file_path):
                 os.remove(file_path)
 
+    print("tpu devices: ", jax.devices())
+
     if multithreaded:
         ray.init(
             runtime_env=ray.runtime_env.RuntimeEnv(
