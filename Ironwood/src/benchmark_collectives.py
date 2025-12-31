@@ -30,17 +30,17 @@ GLOBAL_PSTATE = 7
 LOG_SPARSECORE_USAGE = False
 
 os.environ["LIBTPU_INIT_ARGS"] = (
-      "--xla_jf_debug_level=3 ",
-      "--xla_sc_disable_megacore_partitioning=true ",
-      "--xla_tpu_disable_sparse_core_collective_offload_remover=true ",
-      "--xla_tpu_enable_all_gather_offload_tracing=true ",
-      "--xla_tpu_enable_sparse_core_collective_offload_2d_all_gather=true ",
-      "--xla_tpu_enable_sparse_core_collective_offload_3d_all_gather=true ",
-      "--xla_tpu_enable_sparse_core_collective_offload_all_gather=true ",
-      "--xla_tpu_use_single_sparse_core_for_all_gather_offload=true ",
-      "--xla_tpu_use_tc_device_shape_on_sc=true ",
-      f"--xla_tpu_dvfs_p_state={GLOBAL_PSTATE} ",
-      "--xla_tpu_scoped_vmem_limit_kib=65536 ",
+      "--xla_jf_debug_level=3 "
+      "--xla_sc_disable_megacore_partitioning=true "
+      "--xla_tpu_disable_sparse_core_collective_offload_remover=true "
+      "--xla_tpu_enable_all_gather_offload_tracing=true "
+      "--xla_tpu_enable_sparse_core_collective_offload_2d_all_gather=true "
+      "--xla_tpu_enable_sparse_core_collective_offload_3d_all_gather=true "
+      "--xla_tpu_enable_sparse_core_collective_offload_all_gather=true "
+      "--xla_tpu_use_single_sparse_core_for_all_gather_offload=true "
+      "--xla_tpu_use_tc_device_shape_on_sc=true "
+      f"--xla_tpu_dvfs_p_state={GLOBAL_PSTATE} "
+      "--xla_tpu_scoped_vmem_limit_kib=65536 "
       "--xla_jf_dump_to=/tmp/llo/allgather"
 )
 
