@@ -497,6 +497,7 @@ def all_gather_benchmark(
       "--xla_tpu_use_tc_device_shape_on_sc=true",
       f"--xla_tpu_dvfs_p_state={GLOBAL_PSTATE}",
       "--xla_tpu_scoped_vmem_limit_kib=65536",
+      "--xla_jf_dump_to=/tmp/llo/allgather"
   ]
   # libtpu_init_args=[ ]
   os.environ["LIBTPU_INIT_ARGS"] = " ".join(libtpu_init_args)
