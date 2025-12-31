@@ -65,34 +65,24 @@ benchmarks:
           sharding_strategy: "8x1x1", # All 8 devices in one line
         }
 
-      - {
-          matrix_dim_range: { start: 2, end: 8192, multiplier: 2 },
-          dtype: "float32",
-          op_dimension: 1,
-          num_runs: 5,
-          mesh_shape: "1x8x1",
-          ici_size: 8,
-          sharding_strategy: "8x1x1", # All 8 devices in one line
-        }
-
-      - {
-          matrix_dim_range: { start: 1, end: 256, increase_by: 20 },
-          dtype: "float32",
-          op_dimension: 1,
-          num_runs: 5,
-          mesh_shape: "8x1x1",
-          ici_size: 8,
-          sharding_strategy: "8x1x1", # All 8 devices in one line
-        }
-      - {
-          matrix_dim_range: { start: 256, end: 1024, increase_by: 30 },
-          dtype: "float32",
-          op_dimension: 1,
-          num_runs: 5,
-          mesh_shape: "8x1x1",
-          ici_size: 8,
-          sharding_strategy: "8x1x1", # All 8 devices in one line
-        }
+      # - {
+      #     matrix_dim_range: { start: 1, end: 256, increase_by: 20 },
+      #     dtype: "float32",
+      #     op_dimension: 1,
+      #     num_runs: 5,
+      #     mesh_shape: "8x1x1",
+      #     ici_size: 8,
+      #     sharding_strategy: "8x1x1", # All 8 devices in one line
+      #   }
+      # - {
+      #     matrix_dim_range: { start: 256, end: 1024, increase_by: 30 },
+      #     dtype: "float32",
+      #     op_dimension: 1,
+      #     num_runs: 5,
+      #     mesh_shape: "8x1x1",
+      #     ici_size: 8,
+      #     sharding_strategy: "8x1x1", # All 8 devices in one line
+      #   }
       # - {
       #     matrix_dim_range: { start: 2, end: 8192, multiplier: 2 },
       #     dtype: "bfloat16",
