@@ -36,7 +36,7 @@ os.environ["LIBTPU_INIT_ARGS"] = (
       "--xla_tpu_use_tc_device_shape_on_sc=true "
       f"--xla_tpu_dvfs_p_state=7 "
       "--xla_tpu_scoped_vmem_limit_kib=65536 "
-      "--xla_jf_dump_to=/tmp/llo/allgather"
+    #   "--xla_jf_dump_to=/tmp/llo/allgather"
 )
 
 COLLECTIVE_BENCHMARK_MAP = {
