@@ -517,6 +517,7 @@ def all_gather_benchmark(
   mesh = create_mesh(ici_size, mesh_shape)
 
   sharding_axis = get_sharding_axis(sharding_strategy, mesh)
+  print("sharding_axis:", sharding_axis)
 
   def f(x):
     with jax.named_scope(MARKER):
