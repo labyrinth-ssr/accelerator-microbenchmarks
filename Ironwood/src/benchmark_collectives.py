@@ -63,10 +63,7 @@ def create_mesh(ici_size: int, mesh_shape: str) -> Mesh:
   device_kind = first_device.device_kind
   print("Device kind: ", device_kind)
   print("Mesh shape: ", shape)
-  mesh_devices = mesh_utils.create_device_mesh(shape, devices=jax.devices())
-  print("Mesh devices: ", mesh_devices)
-  shape = [2]
-  mesh_devices = mesh_utils.create_device_mesh(shape, devices=jax.devices()[:2])
+  mesh_devices = mesh_utils.create_device_mesh(shape, devices=devices)
   axis_names = [f"d_{i}" for i in range(len(shape))]
   print("Mesh devices: ", mesh_devices)
   mesh = Mesh(mesh_devices, axis_names)
