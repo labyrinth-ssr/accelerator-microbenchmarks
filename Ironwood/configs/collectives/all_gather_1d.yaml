@@ -68,7 +68,7 @@ benchmarks:
           matrix_dim_range: { start: 4096, end: 5596, increase_by: 100 },
           dtype: "float32",
           op_dimension: 1,
-          num_runs: 1,
+          num_runs: 5,
           mesh_shape: "8x1x1",
           ici_size: 8,
           sharding_strategy: "8x1x1", # All 8 devices in one line
