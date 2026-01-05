@@ -27,7 +27,7 @@ BASE_SHAPE = [1, 8, 128]
 SEED = 0
 GLOBAL_SHARDING_STRATEGY = ShardingStrategy.NO_SHARDING
 GLOBAL_PSTATE = 7
-LOG_SPARSECORE_USAGE = False
+LOG_SPARSECORE_USAGE = True
 
 # os.environ["LIBTPU_INIT_ARGS"] = (
 #       "--xla_jf_debug_level=3 "
@@ -119,6 +119,7 @@ def unified_ici_collectives_metrics(
   dtype_bytes = dtype.dtype.itemsize
   if xla_output:
     xla_output_json = json.loads(xla_output)
+    print(xla_output_json)
     hlo_input_shape = xla_output_json.get("hlo_input_shape")
     hlo_output_shape = xla_output_json.get("hlo_output_shape")
     hlo_replica_groups = xla_output_json.get("hlo_replica_groups")
