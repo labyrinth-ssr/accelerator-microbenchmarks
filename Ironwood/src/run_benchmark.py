@@ -25,11 +25,11 @@ import json
 import shutil
 
 os.environ["LIBTPU_INIT_ARGS"] = (
-      "--xla_tpu_enable_all_reduce_offload_tracing=true",
-      "--xla_tpu_enable_all_reduce_scatter_fusion=false",
-      "--xla_tpu_enable_sparse_core_collective_offload_all_reduce=true",
-      "--xla_tpu_pad_operations_input_tiles=true",
-      "--xla_tpu_sparse_core_all_reduce_offload_min_size_in_bytes=0",
+      "--xla_tpu_enable_all_reduce_offload_tracing=true "
+      "--xla_tpu_enable_all_reduce_scatter_fusion=false "
+      "--xla_tpu_enable_sparse_core_collective_offload_all_reduce=true "
+      "--xla_tpu_pad_operations_input_tiles=true "
+      "--xla_tpu_sparse_core_all_reduce_offload_min_size_in_bytes=0 "
       "--xla_jf_debug_level=3 "
       "--xla_sc_disable_megacore_partitioning=true "
       "--xla_tpu_disable_sparse_core_collective_offload_remover=true "
