@@ -73,15 +73,15 @@ benchmarks:
       #     ici_size: 8,
       #     sharding_strategy: "2x1x1", # All 8 devices in one line
       #   }
-      # - {
-      #     matrix_dim: 2048,
-      #     dtype: "float32",
-      #     op_dimension: 1,
-      #     num_runs: 5,
-      #     mesh_shape: "2x2",
-      #     ici_size: 4,
-      #     sharding_strategy: "2x2", # All 8 devices in one line
-      #   }
+      - {
+          matrix_dim: 2048,
+          dtype: "float32",
+          op_dimension: 1,
+          num_runs: 5,
+          mesh_shape: "2x2",
+          ici_size: 4,
+          sharding_strategy: "2x2", # All 8 devices in one line
+        }
       # - {
       #     matrix_dim: 4096,
       #     dtype: "float32",
