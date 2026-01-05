@@ -119,26 +119,26 @@ benchmarks:
       #     ici_size: 2,
       #     sharding_strategy: "2", # All 8 devices in one line
       #   }
+      # - {
+      #     matrix_dim: { start: 4096, end: 5200, increase_by: 30 },
+      #     dtype: "float32",
+      #     op_dimension: 1,
+      #     num_runs: 5,
+      #     mesh_shape: "2",
+      #     ici_size: 2,
+      #     sharding_strategy: "2", # All 8 devices in one line
+      #   }
+      # - {
+      #     matrix_dim_range: { start: 1, end: 1024, increase_by: 30 },
+      #     dtype: "float32",
+      #     op_dimension: 1,
+      #     num_runs: 5,
+      #     mesh_shape: "2",
+      #     ici_size: 2,
+      #     sharding_strategy: "2", # All 8 devices in one line
+      #   }
       - {
-          matrix_dim: { start: 4096, end: 5200, increase_by: 30 },
-          dtype: "float32",
-          op_dimension: 1,
-          num_runs: 5,
-          mesh_shape: "2",
-          ici_size: 2,
-          sharding_strategy: "2", # All 8 devices in one line
-        }
-      - {
-          matrix_dim_range: { start: 1, end: 1024, increase_by: 30 },
-          dtype: "float32",
-          op_dimension: 1,
-          num_runs: 5,
-          mesh_shape: "2",
-          ici_size: 2,
-          sharding_strategy: "2", # All 8 devices in one line
-        }
-      - {
-          matrix_dim_range: { start: 2, end: 8192, multiplier: 2 },
+          matrix_dim_range: { start: 8192, end: 10000, multiplier: 100 },
           dtype: "float32",
           op_dimension: 1,
           num_runs: 5,
