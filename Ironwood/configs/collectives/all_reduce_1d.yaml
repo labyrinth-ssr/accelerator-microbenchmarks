@@ -138,7 +138,7 @@ benchmarks:
       #     sharding_strategy: "2", # All 8 devices in one line
       #   }
       - {
-          matrix_dim_range: { start: 8192, end: 10000, multiplier: 100 },
+          matrix_dim_range: { start: 8192, end: 10000, increase_by: 100 },
           dtype: "float32",
           op_dimension: 1,
           num_runs: 5,
