@@ -51,7 +51,8 @@ def create_mesh(ici_size: int, mesh_shape: str) -> Mesh:
 
   if len(devices) < devices_needed:
     raise ValueError(f"Need {devices_needed} devices, but found {len(devices)}")
-  devices = devices[:devices_needed]
+  # devices = devices[:devices_needed]
+  devices = [devices[0], devices[2]]
   mesh_shape = mesh_shape.split("x")
   mesh_shape = [int(i) for i in mesh_shape]
 
