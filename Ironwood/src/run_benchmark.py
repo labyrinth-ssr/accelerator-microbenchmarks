@@ -12,7 +12,7 @@ import itertools
 import random
 import string
 from typing import Any, Callable, Dict, List, Tuple
-from benchmark_utils import maybe_write_metrics_file, rename_xla_dump, MetricsStatistics
+from benchmark_utils import maybe_write_metrics_file, rename_xla_dump, rename_llo_dump, MetricsStatistics
 import jax
 import yaml
 import ray
@@ -349,16 +349,19 @@ def run_single_benchmark(benchmark_config: Dict[str, Any], output_path: str):
     trace_dir = benchmark_config.get("trace_dir")
     xlml_metrics_dir = benchmark_config.get("xlml_metrics_dir")
     xla_dump_dir = benchmark_config.get("xla_dump_dir")
+    llo_dump_dir = benchmark_config.get("llo_dump_dir")
     if output_path != "":
         # csv_path = os.path.join(output_path, benchmark_name)
         trace_dir = os.path.join(output_path, benchmark_name, "trace")
         xla_dump_dir = os.path.join(output_path, benchmark_name, "hlo_graphs")
+        llo_dump_dir = os.path.join(output_path, benchmark_name, "llo_graphs")
+        print("llo dump dir: ", llo_dump_dir)
 
     if not benchmark_name:
         raise ValueError("Each benchmark must have a 'benchmark_name'.")
 
     # Clean up output directories before starting the benchmark
-    dirs_to_clean = [trace_dir, xlml_metrics_dir, csv_path, xla_dump_dir]
+    dirs_to_clean = [trace_dir, xlml_metrics_dir, csv_path, xla_dump_dir, llo_dump_dir]
     for dir_path in dirs_to_clean:
         if dir_path and os.path.exists(dir_path):
             print(f"Cleaning up directory: {dir_path}")
@@ -398,6 +401,25 @@ def run_single_benchmark(benchmark_config: Dict[str, Any], output_path: str):
                 benchmark_name=benchmark_name,
                 benchmark_param=original_benchmark_param,
             )
+
+        # Rename LLO dump files if directory is specified
+        if llo_dump_dir and benchmark_name in COLLECTIVE_BENCHMARK_MAP:
+            # Determine operator name based on benchmark
+            operator_map = {
+                "all_gather": "all-gather",
+                "psum": "all-reduce",
+                "psum_scatter": "reduce-scatter",
+                "all_to_all": "all-to-all",
+            }
+            operator_name = operator_map.get(benchmark_name, "all-gather")
+            rename_llo_dump(
+                llo_dump_dir="/tmp/llo/allgather",
+                dest_llo_dump_dir=llo_dump_dir,
+                benchmark_name=benchmark_name,
+                benchmark_param=original_benchmark_param,
+                operator_name=operator_name,
+            )
+
         benchmark_results["xla_output"] = xla_output
         # Filter benchmark_results to include only keys present in
         # calculate_metrics_func

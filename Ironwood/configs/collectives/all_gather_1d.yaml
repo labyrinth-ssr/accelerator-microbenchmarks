@@ -55,15 +55,15 @@ benchmarks:
       #     ici_size: 8,
       #     sharding_strategy: "2x1x1", # Only d_0 (2-way)
       #   }
-      - {
-          matrix_dim: 2048,
-          dtype: "float32",
-          op_dimension: 1,
-          num_runs: 5,
-          mesh_shape: "2x2x2",
-          ici_size: 8,
-          sharding_strategy: "2x2x1", # All 8 devices in one line
-        }
+      # - {
+      #     matrix_dim: 2048,
+      #     dtype: "float32",
+      #     op_dimension: 1,
+      #     num_runs: 5,
+      #     mesh_shape: "2x2x2",
+      #     ici_size: 8,
+      #     sharding_strategy: "2x2x1", # All 8 devices in one line
+      #   } // sparsecore used
       # - {
       #     matrix_dim: 4096,
       #     dtype: "float32",
@@ -132,3 +132,4 @@ benchmarks:
     csv_path: "/tmp/all_gather_1d"
     xlml_metrics_dir: "/tmp/all_gather_1d"
     xla_dump_dir: "/tmp/all_gather_1d/hlo_graphs"
+    llo_dump_dir: "/tmp/all_gather_1d/llo_graphs"

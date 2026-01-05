@@ -907,6 +907,80 @@ def rename_xla_dump(
         "hlo_first_replica_group": first_replica_group,
     })
 
+
+def rename_llo_dump(
+    llo_dump_dir: str,
+    dest_llo_dump_dir: str,
+    benchmark_name: str,
+    benchmark_param: Dict[str, Any],
+    operator_name: str = "all-gather",
+):
+    """
+    Renames LLO dump files from JitFusion to include benchmark parameters.
+
+    LLO files have format: {timestamp}-{operator_name}-{pass_number}-{pass_name}.txt
+    They will be renamed to: {benchmark_name}_{params}-{pass_number}-{pass_name}.txt
+
+    Args:
+        llo_dump_dir: Source directory containing LLO dump files
+        dest_llo_dump_dir: Destination directory for renamed files
+        benchmark_name: Name of the benchmark (e.g., "all_gather")
+        benchmark_param: Dictionary of benchmark parameters
+        operator_name: Operator name to filter (e.g., "all-gather")
+    """
+
+    if not os.path.exists(llo_dump_dir):
+        print(f"LLO dump directory not found: {llo_dump_dir}")
+        return
+
+    # Serialize benchmark parameters into a string
+    serialized_benchmark_param = "_".join(
+        f"{key}_{value}" for key, value in benchmark_param.items()
+    )
+
+    # Find all files matching the operator pattern
+    # Pattern: *-{operator_name}-*.txt
+    pattern = os.path.join(llo_dump_dir, f"*-{operator_name}-*.txt")
+    matching_files = glob.glob(pattern)
+
+    if not matching_files:
+        print(f"No LLO files found for operator '{operator_name}' in {llo_dump_dir}")
+        return
+
+    print(f"Found {len(matching_files)} LLO files for operator '{operator_name}'")
+
+    # Create destination directory
+    os.makedirs(dest_llo_dump_dir, exist_ok=True)
+
+    # Process each file
+    for original_filepath in matching_files:
+        original_filename = os.path.basename(original_filepath)
+
+        # Extract the pass information after operator name
+        # Pattern: {timestamp}-{operator_name}-{pass_number}-{pass_name}.txt
+        # We want to capture: {pass_number}-{pass_name}.txt
+        match = re.search(rf"-{re.escape(operator_name)}-(\d+-.*\.txt)$", original_filename)
+
+        if not match:
+            print(f"Warning: Could not parse filename format: {original_filename}")
+            continue
+
+        pass_info = match.group(1)  # e.g., "60-post-delay-converter.txt"
+
+        # Construct new filename
+        new_filename = f"{benchmark_name}_{serialized_benchmark_param}-{pass_info}"
+        new_filepath = os.path.join(dest_llo_dump_dir, new_filename)
+
+        # Copy the file
+        try:
+            shutil.copy(original_filepath, new_filepath)
+            print(f"Renamed: {original_filename} -> {new_filename}")
+        except Exception as e:
+            print(f"Error copying {original_filepath}: {e}")
+
+    print(f"LLO dump files stored in {dest_llo_dump_dir}")
+
+
 def extract_hlo_features_from_file(hlo_file_path: str) -> Tuple[str | None, str | None, str | None, list[int] | None]:
     """
     Extracts input shape, output shape, and replica groups from an HLO file.
