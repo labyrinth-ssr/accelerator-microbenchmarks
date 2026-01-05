@@ -146,7 +146,7 @@ benchmarks:
           ici_size: 8,
           sharding_strategy: "2x1x1", # Only d_0 (2-way)
         }
-    trace_dir: "../data/collectives/all_reduce_1d"
-    csv_path: "../data/collectives/all_reduce_1d"
-    xlml_metrics_dir: "../data/collectives/all_reduce_1d"
-    xla_dump_dir: "../data/collectives/all_reduce_1d/hlo_graphs"
+    trace_dir: "/tmp/all_reduce_1d"
+    csv_path: "/tmp/all_reduce_1d"
+    xlml_metrics_dir: "/tmp/all_reduce_1d"
+    xla_dump_dir: "/tmp/all_reduce_1d/hlo_graphs"
