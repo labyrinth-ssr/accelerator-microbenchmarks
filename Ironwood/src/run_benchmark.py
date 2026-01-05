@@ -25,16 +25,15 @@ import json
 import shutil
 
 os.environ["LIBTPU_INIT_ARGS"] = (
+      "--xla_tpu_enable_all_reduce_offload_tracing=true",
+      "--xla_tpu_enable_all_reduce_scatter_fusion=false",
+      "--xla_tpu_enable_sparse_core_collective_offload_all_reduce=true",
+      "--xla_tpu_pad_operations_input_tiles=true",
+      "--xla_tpu_sparse_core_all_reduce_offload_min_size_in_bytes=0",
       "--xla_jf_debug_level=3 "
       "--xla_sc_disable_megacore_partitioning=true "
       "--xla_tpu_disable_sparse_core_collective_offload_remover=true "
-      "--xla_tpu_enable_all_gather_offload_tracing=true "
-      "--xla_tpu_enable_sparse_core_collective_offload_2d_all_gather=true "
-      "--xla_tpu_enable_sparse_core_collective_offload_3d_all_gather=true "
-      "--xla_tpu_enable_sparse_core_collective_offload_all_gather=true "
-      "--xla_tpu_use_single_sparse_core_for_all_gather_offload=true "
-      "--xla_tpu_use_tc_device_shape_on_sc=true "
-      f"--xla_tpu_dvfs_p_state=7 "
+      "--xla_tpu_dvfs_p_state=7 "
       "--xla_tpu_scoped_vmem_limit_kib=65536 "
     #   "--xla_jf_dump_to=/tmp/llo/allgather "
       "--xla_tpu_decompose_all_reduce_bidirectional_communication=true"
