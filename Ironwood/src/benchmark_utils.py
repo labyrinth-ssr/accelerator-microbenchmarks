@@ -974,7 +974,7 @@ def rename_llo_dump(
         # Copy the file
         try:
             shutil.copy(original_filepath, new_filepath)
-            print(f"Renamed: {original_filename} -> {new_filename}")
+            # print(f"Renamed: {original_filename} -> {new_filename}")
         except Exception as e:
             print(f"Error copying {original_filepath}: {e}")
 
