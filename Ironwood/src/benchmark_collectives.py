@@ -68,7 +68,7 @@ def create_mesh(ici_size: int, mesh_shape: str) -> Mesh:
   mesh_devices = mesh_utils.create_device_mesh(shape, devices=devices)
   # print("Mesh devices: ", mesh_devices)
   # print("axis names: ", axis_names)
-  mesh_devices = [[devices[0], devices[1]],[devices[2], devices[3]]]
+  # mesh_devices = [[devices[0], devices[1]],[devices[2], devices[3]]]
   # ], [
   #   [devices[4], devices[5]],
   #   [devices[6], devices[7]]
