@@ -44,8 +44,18 @@ LOG_SPARSECORE_USAGE = True
 #       "--xla_jf_dump_to=/tmp/llo/allgather"
 # )
 
-def create_mesh(ici_size: int, mesh_shape: str) -> Mesh:
-  """Creates a mesh with the given ICI size."""
+def create_mesh(ici_size: int, mesh_shape: str, return_mesh_devices: bool = False):
+  """Creates a mesh with the given ICI size.
+
+  Args:
+    ici_size: The number of chips in a single slice.
+    mesh_shape: The shape of the mesh as a string, e.g., "2x2x4".
+    return_mesh_devices: If True, return both mesh and mesh_devices array.
+
+  Returns:
+    If return_mesh_devices is False (default): Returns Mesh object.
+    If return_mesh_devices is True: Returns tuple of (Mesh, mesh_devices array).
+  """
   devices_needed = ici_size
   devices = jax.devices()
   print(devices)
@@ -68,7 +78,7 @@ def create_mesh(ici_size: int, mesh_shape: str) -> Mesh:
   mesh_devices = mesh_utils.create_device_mesh(shape, devices=devices)
   # print("Mesh devices: ", mesh_devices)
   # print("axis names: ", axis_names)
-  mesh_devices = [[devices[0], devices[1]],[devices[2], devices[3]]]
+  # mesh_devices = [[devices[0], devices[1]],[devices[2], devices[3]]]
   # ], [
   #   [devices[4], devices[5]],
   #   [devices[6], devices[7]]
@@ -76,6 +86,9 @@ def create_mesh(ici_size: int, mesh_shape: str) -> Mesh:
   # mesh_devices = devices
   print("mesh devices: ", mesh_devices)
   mesh = Mesh(mesh_devices, axis_names)
+
+  if return_mesh_devices:
+    return mesh, mesh_devices
   return mesh
 
 
@@ -87,6 +100,65 @@ def get_sharding_axis(dim_str: str, mesh: Mesh) -> tuple[str, ...]:
       name for i, name in enumerate(mesh.axis_names) if dim_tuple[i] > 1
   )
   return sharding_axis
+
+
+def parse_replica_groups_string(replica_groups_str: str):
+  """Parses HLO replica_groups string format into a list of lists.
+
+  Args:
+    replica_groups_str: String in format "{{0,1,2,3},{4,5,6,7},...}"
+
+  Returns:
+    List of lists, e.g., [[0,1,2,3], [4,5,6,7], ...]
+  """
+  if not replica_groups_str:
+    return None
+
+  # Remove outer braces: {{...}} -> {...}
+  content = replica_groups_str.strip()[2:-2]
+
+  # Split by "},{"
+  groups_str = content.split('},{')
+
+  # Parse each group
+  groups = []
+  for group_str in groups_str:
+    group = [int(x.strip()) for x in group_str.split(',')]
+    groups.append(group)
+
+  return groups
+
+
+def map_replica_groups_to_device_ids(replica_groups, mesh_devices):
+  """Maps logical indices in replica_groups to actual TpuDevice IDs.
+
+  Args:
+    replica_groups: List of replica groups, e.g., [[0,1,2,3], [4,5,6,7], ...]
+                    OR string in format "{{0,1,2,3},{4,5,6,7},...}"
+    mesh_devices: The mesh device array from create_device_mesh
+
+  Returns:
+    List of replica groups with actual device IDs instead of logical indices
+  """
+  import numpy as np
+
+  # If replica_groups is a string, parse it first
+  if isinstance(replica_groups, str):
+    replica_groups = parse_replica_groups_string(replica_groups)
+
+  if not replica_groups:
+    return None
+
+  # Flatten mesh_devices to get the mapping from logical index to device
+  flat_devices = np.array(mesh_devices).flatten()
+
+  # Map each replica group
+  mapped_groups = []
+  for group in replica_groups:
+    mapped_group = [flat_devices[idx].id for idx in group]
+    mapped_groups.append(mapped_group)
+
+  return mapped_groups
 
 
 def get_metrics_helper(
@@ -114,7 +186,8 @@ def unified_ici_collectives_metrics(
     iteration: int,
     op_type: str,
     trace_dir: str = None,
-    ici_size: int = 8
+    ici_size: int = 8,
+    mesh_devices = None,
 ) -> Dict[str, Any]:
   """Calculates the metrics for the ICI collectives benchmark."""
 
@@ -124,6 +197,7 @@ def unified_ici_collectives_metrics(
     )
   hlo_input_shape = hlo_output_shape = hlo_replica_groups = None
   hlo_first_replica_group = []
+  hlo_replica_groups_with_device_ids = None
 
   input_num_elements = matrix_shape[0] * matrix_shape[1] * matrix_shape[2]
   dtype_bytes = dtype.dtype.itemsize
@@ -135,6 +209,13 @@ def unified_ici_collectives_metrics(
     hlo_output_shape = xla_output_json.get("hlo_output_shape")
     hlo_replica_groups = xla_output_json.get("hlo_replica_groups")
     hlo_first_replica_group = xla_output_json.get("hlo_first_replica_group")
+
+    # Map replica groups to actual device IDs if mesh_devices is provided
+    if hlo_replica_groups and mesh_devices is not None:
+      hlo_replica_groups_with_device_ids = map_replica_groups_to_device_ids(
+          hlo_replica_groups, mesh_devices
+      )
+      print("hlo_replica_groups_with_device_ids: ", hlo_replica_groups_with_device_ids)
 
   rank = max(len(hlo_first_replica_group), 1)
   group_num = ici_size / len(hlo_first_replica_group)
@@ -205,6 +286,7 @@ def unified_ici_collectives_metrics(
       "hlo_input_shape": json.dumps(hlo_input_shape),
       "hlo_output_shape": json.dumps(hlo_output_shape),
       "hlo_replica_groups": json.dumps(hlo_replica_groups),
+      "hlo_replica_groups_with_device_ids": json.dumps(hlo_replica_groups_with_device_ids),
       "sparsecore_used": sparsecore_used,
   }
   achieved_bw = [transferred_data/my_time for my_time in ici_average_time_ms_list]
