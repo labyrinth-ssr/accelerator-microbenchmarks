@@ -76,6 +76,7 @@ def create_mesh(ici_size: int, mesh_shape: str) -> Mesh:
   # mesh_devices = devices
   print("mesh devices: ", mesh_devices)
   mesh = Mesh(mesh_devices, axis_names)
+  print("mesh devices: ", mesh.devices)
   return mesh
 
 
@@ -656,30 +657,32 @@ def all_to_all_benchmark(
       )
   )
   m = matrix_dim
-  n = BASE_SHAPE[1]
-  k = BASE_SHAPE[2]
+  n = 8192
+  # k = BASE_SHAPE[2]
 
   def data_generator():
     """Creates new random data on host and puts it on device."""
     nonlocal key  # Use and update the outer 'key'
 
-    matrix = jnp.ones((m, n, k), dtype=dtype)
+    matrix = jnp.ones((m, n), dtype=dtype)
+
     return (matrix,)
 
   print("Running all_to_all benchmark", num_runs, matrix_dim)
   time_ms_list = multiple_iteration_timeit_from_trace(
       jit_sharded_f,
       data_generator,
-      matrix_dim=f"{m}x{n}x{k}",
+      matrix_dim=f"{m}x{n}",
       tries=num_runs,
       task="all_to_all_ici_op",
       trace_dir=trace_dir,
   )
   return {
       "ici_average_time_ms_list": time_ms_list,
-      "matrix_shape": (m, n, k),
+      "matrix_shape": (m, n),
       "op_type": "A2A",
       "trace_dir": trace_dir,
+      "mesh_devices": mesh.devices
   }
 
 
