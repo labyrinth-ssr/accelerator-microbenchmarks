@@ -199,7 +199,7 @@ def unified_ici_collectives_metrics(
   hlo_first_replica_group = []
   hlo_replica_groups_with_device_ids = None
 
-  input_num_elements = matrix_shape[0] * matrix_shape[1] * matrix_shape[2]
+  input_num_elements = matrix_shape[0] * matrix_shape[1]
   dtype_bytes = dtype.dtype.itemsize
   print("xla outoput:", xla_output)
   if xla_output:
@@ -716,7 +716,7 @@ def all_to_all_benchmark(
       f"--xla_tpu_dvfs_p_state={GLOBAL_PSTATE}",
   ]
   os.environ["LIBTPU_INIT_ARGS"] = " ".join(libtpu_init_args)
-  mesh = create_mesh(ici_size, mesh_shape)
+  mesh, mesh_devices = create_mesh(ici_size, mesh_shape, True)
   key = jax.random.key(SEED)
   lhs_sharding = get_lhs_named_shading(mesh, GLOBAL_SHARDING_STRATEGY)
   out_sharding = get_out_sharding(GLOBAL_SHARDING_STRATEGY)
@@ -738,30 +738,32 @@ def all_to_all_benchmark(
       )
   )
   m = matrix_dim
-  n = BASE_SHAPE[1]
-  k = BASE_SHAPE[2]
+  n = 8192
+  # k = BASE_SHAPE[2]
 
   def data_generator():
     """Creates new random data on host and puts it on device."""
     nonlocal key  # Use and update the outer 'key'
 
-    matrix = jnp.ones((m, n, k), dtype=dtype)
+    matrix = jnp.ones((m, n), dtype=dtype)
+
     return (matrix,)
 
   print("Running all_to_all benchmark", num_runs, matrix_dim)
   time_ms_list = multiple_iteration_timeit_from_trace(
       jit_sharded_f,
       data_generator,
-      matrix_dim=f"{m}x{n}x{k}",
+      matrix_dim=f"{m}x{n}",
       tries=num_runs,
       task="all_to_all_ici_op",
       trace_dir=trace_dir,
   )
   return {
       "ici_average_time_ms_list": time_ms_list,
-      "matrix_shape": (m, n, k),
+      "matrix_shape": (m, n),
       "op_type": "A2A",
       "trace_dir": trace_dir,
+      "mesh_devices": mesh_devices  # Return the mesh_devices array, not mesh.devices
   }
 
 
@@ -777,6 +779,7 @@ def all_to_all_benchmark_calculate_metrics(
     xla_output: str,
     op_type: str,
     trace_dir: str,
+    mesh_devices = None,  # Add mesh_devices parameter
 ) -> Dict[str, Any]:
   """Calculates the metrics for the all_to_all benchmark."""
   # Build dictionary of all the parameters in the function
@@ -792,5 +795,7 @@ def all_to_all_benchmark_calculate_metrics(
       matrix_dim,
       op_type,
       trace_dir,
+      ici_size,
+      mesh_devices,  # Pass mesh_devices to unified_ici_collectives_metrics
   )
 
