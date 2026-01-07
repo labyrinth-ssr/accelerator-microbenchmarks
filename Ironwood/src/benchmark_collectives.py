@@ -286,7 +286,8 @@ def unified_ici_collectives_metrics(
       "hlo_input_shape": json.dumps(hlo_input_shape),
       "hlo_output_shape": json.dumps(hlo_output_shape),
       "hlo_replica_groups": json.dumps(hlo_replica_groups),
-      "hlo_replica_groups_with_device_ids": json.dumps(hlo_replica_groups_with_device_ids),
+      # Double encode to prevent ast.literal_eval from converting string back to list
+      "hlo_replica_groups_with_device_ids": json.dumps(json.dumps(hlo_replica_groups_with_device_ids)) if hlo_replica_groups_with_device_ids is not None else json.dumps(None),
       "sparsecore_used": sparsecore_used,
   }
   achieved_bw = [transferred_data/my_time for my_time in ici_average_time_ms_list]
