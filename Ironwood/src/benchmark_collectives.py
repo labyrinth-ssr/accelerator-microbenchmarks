@@ -48,11 +48,12 @@ def create_mesh(ici_size: int, mesh_shape: str) -> Mesh:
   """Creates a mesh with the given ICI size."""
   devices_needed = ici_size
   devices = jax.devices()
+  print(devices)
 
   if len(devices) < devices_needed:
     raise ValueError(f"Need {devices_needed} devices, but found {len(devices)}")
-  # devices = devices[:devices_needed]
-  devices = [devices[0], devices[2]]
+  devices = devices[:devices_needed]
+  # devices = [devices[0], devices[6]]
   mesh_shape = mesh_shape.split("x")
   mesh_shape = [int(i) for i in mesh_shape]
 
@@ -65,8 +66,15 @@ def create_mesh(ici_size: int, mesh_shape: str) -> Mesh:
   print("Device kind: ", device_kind)
   print("Mesh shape: ", shape)
   mesh_devices = mesh_utils.create_device_mesh(shape, devices=devices)
-  axis_names = [f"d_{i}" for i in range(len(shape))]
-  print("Mesh devices: ", mesh_devices)
+  # print("Mesh devices: ", mesh_devices)
+  # print("axis names: ", axis_names)
+  mesh_devices = [[devices[0], devices[1]],[devices[2], devices[3]]]
+  # ], [
+  #   [devices[4], devices[5]],
+  #   [devices[6], devices[7]]
+  # ]]
+  # mesh_devices = devices
+  print("mesh devices: ", mesh_devices)
   mesh = Mesh(mesh_devices, axis_names)
   return mesh
 
@@ -106,6 +114,7 @@ def unified_ici_collectives_metrics(
     iteration: int,
     op_type: str,
     trace_dir: str = None,
+    ici_size: int = 8
 ) -> Dict[str, Any]:
   """Calculates the metrics for the ICI collectives benchmark."""
 
@@ -128,6 +137,8 @@ def unified_ici_collectives_metrics(
     hlo_first_replica_group = xla_output_json.get("hlo_first_replica_group")
 
   rank = max(len(hlo_first_replica_group), 1)
+  group_num = ici_size / len(hlo_first_replica_group)
+  print("group num: ", group_num)
 
   if all(i % 2 == 0 for i in hlo_first_replica_group):
     replica_group_type = "parallel"
@@ -148,7 +159,7 @@ def unified_ici_collectives_metrics(
         * participating_ranks
         * dtype_bytes
         * 0.000001
-        * tf_multiplier
+        * group_num
     )
   elif op_type == "AR":
     transferred_data = (
@@ -588,6 +599,7 @@ def all_gather_benchmark_calculate_metrics(
       matrix_dim,
       op_type,
       trace_dir,
+      ici_size
   )
 
 
