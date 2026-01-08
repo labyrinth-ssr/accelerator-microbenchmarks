@@ -212,8 +212,8 @@ def unified_ici_collectives_metrics(
     replica_group_type = "non-parallel"
 
   if replica_group_type == "parallel":
-    participating_ranks = rank - 2
-    tf_multiplier = 2
+    participating_ranks = rank - 1
+    tf_multiplier = 1
   else:
     participating_ranks = rank - 1
     tf_multiplier = 1
