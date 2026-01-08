@@ -237,6 +237,7 @@ def unified_ici_collectives_metrics(
   if op_type == "AG":
     transferred_data = (
         input_num_elements
+        * 2
         # * participating_ranks
         * dtype_bytes
         * 0.000001
@@ -290,17 +291,12 @@ def unified_ici_collectives_metrics(
       "sparsecore_used": sparsecore_used,
   }
   achieved_bw = [transferred_data/my_time for my_time in ici_average_time_ms_list]
-  link_bw = [bw * (rank - 1) / rank for bw in achieved_bw]
   achieved_bw_statistics = MetricsStatistics(
         metrics_list=achieved_bw, metrics_name="achieved_bw (GB/s)"
     )
-  link_bw_statistics = MetricsStatistics(
-    metrics_list=link_bw, metrics_name="link_bw (GB/s)"
-  )
   metrics = {}
   metrics.update(average_time_ms_statistics.serialize_statistics())
   metrics.update(achieved_bw_statistics.serialize_statistics())
-  metrics.update(link_bw_statistics.serialize_statistics())
 
   print("metadata: ", metadata)
   print("metrics: ", metrics)
