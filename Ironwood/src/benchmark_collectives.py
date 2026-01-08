@@ -199,7 +199,7 @@ def unified_ici_collectives_metrics(
   hlo_first_replica_group = []
   hlo_replica_groups_with_device_ids = None
 
-  input_num_elements = matrix_shape[0] * matrix_shape[1]
+  input_num_elements = matrix_shape[0] * matrix_shape[1] * matrix_shape[2]
   dtype_bytes = dtype.dtype.itemsize
   print("xla outoput:", xla_output)
   if xla_output:

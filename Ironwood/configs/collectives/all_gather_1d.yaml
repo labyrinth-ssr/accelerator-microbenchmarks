@@ -20,7 +20,7 @@ benchmarks:
       #     num_runs: 5,
       #   }
       - {
-          matrix_dim: 4096,
+          matrix_dim_range:{start: 2, end: 4096, multiplier: 2}
           dtype: "float32",
           mesh_shape: "2x2x4x2",
           ici_size: 32,
@@ -29,7 +29,7 @@ benchmarks:
           num_runs: 5,
         }
       - {
-          matrix_dim: 4096,
+          matrix_dim_range:{start: 2, end: 4096, multiplier: 2}
           dtype: "float32",
           mesh_shape: "2x2x4x2",
           ici_size: 32,
@@ -38,7 +38,7 @@ benchmarks:
           num_runs: 5,
         }
       - {
-          matrix_dim: 4096,
+          matrix_dim_range:{start: 2, end: 4096, multiplier: 2}
           dtype: "float32",
           mesh_shape: "2x2x4x2",
           ici_size: 32,
@@ -47,7 +47,7 @@ benchmarks:
           num_runs: 5,
         }
       - {
-          matrix_dim: 4096,
+          matrix_dim_range:{start: 2, end: 4096, multiplier: 2}
           dtype: "float32",
           mesh_shape: "2x2x4x2",
           ici_size: 32,
@@ -56,7 +56,7 @@ benchmarks:
           num_runs: 5,
         }
       - {
-          matrix_dim: 4096,
+          matrix_dim_range:{start: 2, end: 4096, multiplier: 2}
           dtype: "float32",
           mesh_shape: "2x2x4x2",
           ici_size: 32,
@@ -65,25 +65,25 @@ benchmarks:
           num_runs: 5,
         }
       - {
-          matrix_dim: 4096,
+          matrix_dim_range:{start: 2, end: 4096, multiplier: 2}
           dtype: "float32",
           mesh_shape: "2x2x4x2",
           ici_size: 32,
-          sharding_strategy: "2x1x2x1", # Only d_1 axis (4 devices)
+          sharding_strategy: "2x1x4x1", # Only d_1 axis (4 devices)
           op_dimension: 1,
           num_runs: 5,
         }
       - {
-          matrix_dim: 4096,
+          matrix_dim_range:{start: 2, end: 4096, multiplier: 2}
           dtype: "float32",
           mesh_shape: "2x2x4x2",
           ici_size: 32,
-          sharding_strategy: "1x2x2x1", # Only d_1 axis (4 devices)
+          sharding_strategy: "1x2x4x1", # Only d_1 axis (4 devices)
           op_dimension: 1,
           num_runs: 5,
         }
       - {
-          matrix_dim: 4096,
+          matrix_dim_range:{start: 2, end: 4096, multiplier: 2}
           dtype: "float32",
           mesh_shape: "2x2x4x2",
           ici_size: 32,
