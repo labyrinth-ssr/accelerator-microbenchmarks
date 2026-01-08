@@ -29,21 +29,6 @@ GLOBAL_SHARDING_STRATEGY = ShardingStrategy.NO_SHARDING
 GLOBAL_PSTATE = 7
 LOG_SPARSECORE_USAGE = True
 
-# os.environ["LIBTPU_INIT_ARGS"] = (
-#       "--xla_jf_debug_level=3 "
-#       "--xla_sc_disable_megacore_partitioning=true "
-#       "--xla_tpu_disable_sparse_core_collective_offload_remover=true "
-#       "--xla_tpu_enable_all_gather_offload_tracing=true "
-#       "--xla_tpu_enable_sparse_core_collective_offload_2d_all_gather=true "
-#       "--xla_tpu_enable_sparse_core_collective_offload_3d_all_gather=true "
-#       "--xla_tpu_enable_sparse_core_collective_offload_all_gather=true "
-#       "--xla_tpu_use_single_sparse_core_for_all_gather_offload=true "
-#       "--xla_tpu_use_tc_device_shape_on_sc=true "
-#       f"--xla_tpu_dvfs_p_state={GLOBAL_PSTATE} "
-#       "--xla_tpu_scoped_vmem_limit_kib=65536 "
-#       "--xla_jf_dump_to=/tmp/llo/allgather"
-# )
-
 def create_mesh(ici_size: int, mesh_shape: str, return_mesh_devices: bool = False):
   """Creates a mesh with the given ICI size.
 
@@ -217,7 +202,7 @@ def unified_ici_collectives_metrics(
       )
       print("hlo_replica_groups_with_device_ids: ", hlo_replica_groups_with_device_ids)
 
-  rank = max(len(hlo_first_replica_group), 1)
+  rank = len(hlo_first_replica_group)
   group_num = ici_size / len(hlo_first_replica_group)
   print("group num: ", group_num)
 
@@ -227,18 +212,20 @@ def unified_ici_collectives_metrics(
     replica_group_type = "non-parallel"
 
   if replica_group_type == "parallel":
-    participating_ranks = rank - 1
-    tf_multiplier = 1
+    participating_ranks = rank - 2
+    tf_multiplier = 2
   else:
     participating_ranks = rank - 1
     tf_multiplier = 1
+
+  participating_ranks = max(1, participating_ranks)
 
   transferred_data = 0
   if op_type == "AG":
     transferred_data = (
         input_num_elements
         * 2
-        # * participating_ranks
+        * participating_ranks
         * dtype_bytes
         * 0.000001
     )
