@@ -940,7 +940,7 @@ def rename_llo_dump(
 
     # Find all files matching the operator pattern
     # Pattern: *-{operator_name}-*.txt
-    pattern = os.path.join(llo_dump_dir, f"*-{operator_name}-*.txt")
+    pattern = os.path.join(llo_dump_dir, f"*{operator_name}*.txt")
     matching_files = glob.glob(pattern)
 
     if not matching_files:

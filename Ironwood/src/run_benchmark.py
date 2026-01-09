@@ -360,12 +360,12 @@ def run_single_benchmark(benchmark_config: Dict[str, Any], output_path: str):
     if not benchmark_name:
         raise ValueError("Each benchmark must have a 'benchmark_name'.")
 
-    # # Clean up output directories before starting the benchmark
-    # dirs_to_clean = [trace_dir, xlml_metrics_dir, csv_path, xla_dump_dir, llo_dump_dir]
-    # for dir_path in dirs_to_clean:
-    #     if dir_path and os.path.exists(dir_path):
-    #         print(f"Cleaning up directory: {dir_path}")
-    #         shutil.rmtree(dir_path)
+    # Clean up output directories before starting the benchmark
+    dirs_to_clean = [trace_dir, xlml_metrics_dir, csv_path, xla_dump_dir, llo_dump_dir]
+    for dir_path in dirs_to_clean:
+        if dir_path and os.path.exists(dir_path):
+            print(f"Cleaning up directory: {dir_path}")
+            shutil.rmtree(dir_path)
 
     # Get the benchmark function
 
@@ -413,7 +413,7 @@ def run_single_benchmark(benchmark_config: Dict[str, Any], output_path: str):
             }
             operator_name = operator_map.get(benchmark_name, "all-gather")
             rename_llo_dump(
-                llo_dump_dir="/tmp/llo/allgather",
+                llo_dump_dir="/tmp/tpu_logs",
                 dest_llo_dump_dir=llo_dump_dir,
                 benchmark_name=benchmark_name,
                 benchmark_param=original_benchmark_param,
