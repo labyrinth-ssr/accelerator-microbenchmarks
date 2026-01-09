@@ -913,7 +913,7 @@ def rename_llo_dump(
     dest_llo_dump_dir: str,
     benchmark_name: str,
     benchmark_param: Dict[str, Any],
-    operator_name: str = "all-gather",
+    operator_name: str = "all_gather",
 ):
     """
     Renames LLO dump files from JitFusion to include benchmark parameters.
@@ -959,7 +959,7 @@ def rename_llo_dump(
         # Extract the pass information after operator name
         # Pattern: {timestamp}-{operator_name}-{pass_number}-{pass_name}.txt
         # We want to capture: {pass_number}-{pass_name}.txt
-        match = re.search(rf"-{re.escape(operator_name)}-(\d+-.*\.txt)$", original_filename)
+        match = re.search(rf"-{re.escape(operator_name)}(?:\.\d+)?-(\d+-.*\.txt)$", original_filename)
 
         if not match:
             print(f"Warning: Could not parse filename format: {original_filename}")

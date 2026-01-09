@@ -406,7 +406,7 @@ def run_single_benchmark(benchmark_config: Dict[str, Any], output_path: str):
         if llo_dump_dir and benchmark_name in COLLECTIVE_BENCHMARK_MAP:
             # Determine operator name based on benchmark
             operator_map = {
-                "all_gather": "gather",
+                "all_gather": "all_gather",
                 "psum": "all-reduce",
                 "psum_scatter": "reduce-scatter",
                 "all_to_all": "all-to-all",
