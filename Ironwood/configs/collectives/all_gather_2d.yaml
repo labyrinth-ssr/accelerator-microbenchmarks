@@ -55,9 +55,9 @@ benchmarks:
           op_dimension: 2,
           num_runs: 5,
         }
-    trace_dir: "/tmp/collectives/all_gather_2d"
-    csv_path: "/tmp/collectives/all_gather_2d"
-    xlml_metrics_dir: "/tmp/collectives/all_gather_2d"
-    xla_dump_dir: "/tmp/collectives/all_gather_2d/hlo_graphs"
-    llo_dump_dir: "/tmp/tpu_logs/all_gather_2d/sparsecore/llo_graphs"
+    trace_dir: "/tmp/collectives/all_gather_2d_sparsecore"
+    csv_path: "/tmp/collectives/all_gather_2d_sparsecore"
+    xlml_metrics_dir: "/tmp/collectives/all_gather_2d_sparsecore"
+    xla_dump_dir: "/tmp/collectives/all_gather_2d_sparsecore/hlo_graphs"
+    llo_dump_dir: "/tmp/tpu_logs/all_gather_2d_sparsecore/llo_graphs"
 
