@@ -26,17 +26,17 @@ import shutil
 
 os.environ["LIBTPU_INIT_ARGS"] = (
       "--xla_jf_debug_level=3 "
-      "--xla_sc_disable_megacore_partitioning=true "
-      "--xla_tpu_disable_sparse_core_collective_offload_remover=true "
+      "--xla_sc_disable_megacore_partitioning=false "
+      "--xla_tpu_disable_sparse_core_collective_offload_remover=false "
       "--xla_tpu_enable_all_gather_offload_tracing=true "
-      "--xla_tpu_enable_sparse_core_collective_offload_2d_all_gather=true "
-      "--xla_tpu_enable_sparse_core_collective_offload_3d_all_gather=true "
-      "--xla_tpu_enable_sparse_core_collective_offload_all_gather=true "
-      "--xla_tpu_use_single_sparse_core_for_all_gather_offload=true "
-      "--xla_tpu_use_tc_device_shape_on_sc=true "
+      "--xla_tpu_enable_sparse_core_collective_offload_2d_all_gather=false "
+      "--xla_tpu_enable_sparse_core_collective_offload_3d_all_gather=false "
+      "--xla_tpu_enable_sparse_core_collective_offload_all_gather=false "
+      "--xla_tpu_use_single_sparse_core_for_all_gather_offload=false "
+      "--xla_tpu_use_tc_device_shape_on_sc=false "
       "--xla_tpu_dvfs_p_state=7 "
     #   "--xla_tpu_scoped_vmem_limit_kib=65536 "
-    #   "--xla_jf_dump_to=/tmp/llo/allgather "
+      "--xla_jf_dump_to=/tmp/llo/allgather "
 )
 
 COLLECTIVE_BENCHMARK_MAP = {
@@ -360,12 +360,12 @@ def run_single_benchmark(benchmark_config: Dict[str, Any], output_path: str):
     if not benchmark_name:
         raise ValueError("Each benchmark must have a 'benchmark_name'.")
 
-    # Clean up output directories before starting the benchmark
-    dirs_to_clean = [trace_dir, xlml_metrics_dir, csv_path, xla_dump_dir, llo_dump_dir]
-    for dir_path in dirs_to_clean:
-        if dir_path and os.path.exists(dir_path):
-            print(f"Cleaning up directory: {dir_path}")
-            shutil.rmtree(dir_path)
+    # # Clean up output directories before starting the benchmark
+    # dirs_to_clean = [trace_dir, xlml_metrics_dir, csv_path, xla_dump_dir, llo_dump_dir]
+    # for dir_path in dirs_to_clean:
+    #     if dir_path and os.path.exists(dir_path):
+    #         print(f"Cleaning up directory: {dir_path}")
+    #         shutil.rmtree(dir_path)
 
     # Get the benchmark function
 
