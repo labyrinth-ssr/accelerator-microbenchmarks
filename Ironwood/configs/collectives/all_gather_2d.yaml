@@ -51,7 +51,7 @@ benchmarks:
           dtype: "float32",
           mesh_shape: "4x2x2x2",
           ici_size: 32,
-          sharding_strategy: "1x2x1x2", # Only d_1 axis (4 devices)
+          sharding_strategy: "1x2x2x2", # Only d_1 axis (4 devices)
           op_dimension: 2,
           num_runs: 5,
         }
@@ -59,5 +59,5 @@ benchmarks:
     csv_path: "/tmp/collectives/all_gather_2d"
     xlml_metrics_dir: "/tmp/collectives/all_gather_2d"
     xla_dump_dir: "/tmp/collectives/all_gather_2d/hlo_graphs"
-    llo_dump_dir: "/tmp/tpu_logs/all_gather_2d/llo_graphs"
+    llo_dump_dir: "/tmp/tpu_logs/all_gather_2d/sparsecore/llo_graphs"
 

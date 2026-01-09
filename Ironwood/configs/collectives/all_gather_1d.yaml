@@ -305,4 +305,4 @@ benchmarks:
     csv_path: "/tmp/all_gather_1d"
     xlml_metrics_dir: "/tmp/all_gather_1d"
     xla_dump_dir: "/tmp/all_gather_1d/hlo_graphs"
-    llo_dump_dir: "/tmp/tpu_logs/all_gather_1d/llo_graphs"
+    llo_dump_dir: "/tmp/tpu_logs/all_gather_1d/sparsecore/llo_graphs"
