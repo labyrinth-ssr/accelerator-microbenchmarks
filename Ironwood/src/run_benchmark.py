@@ -360,10 +360,10 @@ def run_single_benchmark(benchmark_config: Dict[str, Any], output_path: str):
     if not benchmark_name:
         raise ValueError("Each benchmark must have a 'benchmark_name'.")
     
-    tmp_llo_dump_dir = "/tmp/tpu_logs/llo"
+    
 
     # Clean up output directories before starting the benchmark
-    dirs_to_clean = [trace_dir, xlml_metrics_dir, csv_path, xla_dump_dir, llo_dump_dir, tmp_llo_dump_dir]
+    dirs_to_clean = [trace_dir, xlml_metrics_dir, csv_path, xla_dump_dir, llo_dump_dir]
     for dir_path in dirs_to_clean:
         if dir_path and os.path.exists(dir_path):
             print(f"Cleaning up directory: {dir_path}")
@@ -413,14 +413,23 @@ def run_single_benchmark(benchmark_config: Dict[str, Any], output_path: str):
                 "psum_scatter": "reduce-scatter",
                 "all_to_all": "all-to-all",
             }
+
+            tmp_llo_path = "/tmp/tpu_logs/llo"
+
             operator_name = operator_map.get(benchmark_name, "all-gather")
             rename_llo_dump(
-                llo_dump_dir="/tmp/tpu_logs/llo",
+                llo_dump_dir=tmp_llo_path,
                 dest_llo_dump_dir=llo_dump_dir,
                 benchmark_name=benchmark_name,
                 benchmark_param=original_benchmark_param,
                 operator_name=operator_name,
             )
+
+            # Clean up temporary LLO directory after renaming to avoid mixing files from different tests
+            if os.path.exists(tmp_llo_path):
+                shutil.rmtree(tmp_llo_path)
+                os.makedirs(tmp_llo_path, exist_ok=True)
+                print(f"Cleaned up temporary LLO directory: {tmp_llo_path}")
 
         benchmark_results["xla_output"] = xla_output
         # Filter benchmark_results to include only keys present in
