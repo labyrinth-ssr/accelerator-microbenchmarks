@@ -24,6 +24,9 @@ import ast
 import json
 import shutil
 
+TMP_LLO_PATH = "/tmp/tpu_logs/llo"
+
+
 os.environ["LIBTPU_INIT_ARGS"] = (
       "--xla_jf_debug_level=3 "
       "--xla_sc_disable_megacore_partitioning=false "
@@ -36,7 +39,7 @@ os.environ["LIBTPU_INIT_ARGS"] = (
       "--xla_tpu_use_tc_device_shape_on_sc=false "
       "--xla_tpu_dvfs_p_state=7 "
     #   "--xla_tpu_scoped_vmem_limit_kib=65536 "
-      "--xla_jf_dump_to=/tmp/tpu_logs/llo "
+      f"--xla_jf_dump_to={TMP_LLO_PATH}"
 )
 
 COLLECTIVE_BENCHMARK_MAP = {
@@ -363,7 +366,7 @@ def run_single_benchmark(benchmark_config: Dict[str, Any], output_path: str):
     
 
     # Clean up output directories before starting the benchmark
-    dirs_to_clean = [trace_dir, xlml_metrics_dir, csv_path, xla_dump_dir, llo_dump_dir]
+    dirs_to_clean = [trace_dir, xlml_metrics_dir, csv_path, xla_dump_dir, llo_dump_dir, TMP_LLO_PATH]
     for dir_path in dirs_to_clean:
         if dir_path and os.path.exists(dir_path):
             print(f"Cleaning up directory: {dir_path}")
@@ -414,11 +417,10 @@ def run_single_benchmark(benchmark_config: Dict[str, Any], output_path: str):
                 "all_to_all": "all-to-all",
             }
 
-            tmp_llo_path = "/tmp/tpu_logs/llo"
 
             operator_name = operator_map.get(benchmark_name, "all-gather")
             rename_llo_dump(
-                llo_dump_dir=tmp_llo_path,
+                llo_dump_dir=TMP_LLO_PATH,
                 dest_llo_dump_dir=llo_dump_dir,
                 benchmark_name=benchmark_name,
                 benchmark_param=original_benchmark_param,
@@ -426,10 +428,10 @@ def run_single_benchmark(benchmark_config: Dict[str, Any], output_path: str):
             )
 
             # Clean up temporary LLO directory after renaming to avoid mixing files from different tests
-            if os.path.exists(tmp_llo_path):
-                shutil.rmtree(tmp_llo_path)
-                os.makedirs(tmp_llo_path, exist_ok=True)
-                print(f"Cleaned up temporary LLO directory: {tmp_llo_path}")
+            if os.path.exists(TMP_LLO_PATH):
+                shutil.rmtree(TMP_LLO_PATH)
+                os.makedirs(TMP_LLO_PATH, exist_ok=True)
+                print(f"Cleaned up temporary LLO directory: {TMP_LLO_PATH}")
 
         benchmark_results["xla_output"] = xla_output
         # Filter benchmark_results to include only keys present in
