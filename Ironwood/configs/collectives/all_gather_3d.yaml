@@ -2,15 +2,24 @@ benchmarks:
   - benchmark_name: all_gather
     benchmark_sweep_params:
       - {
-          matrix_dim_range: { start: 256, end: 32768, multiplier: 2 },
+          matrix_dim: 4096,
           dtype: "float32",
-          op_dimension: 1,
+          mesh_shape: "4x2x2x2",
+          ici_size: 32,
+          sharding_strategy: "4x2x2x1", # Only d_1 axis (4 devices)
+          op_dimension: 3,
           num_runs: 5,
-          mesh_shape: "2x2x2",
-          ici_size: 8,
-          sharding_strategy: "2x2x2", # Only d_0 (2-way)
         }
-    trace_dir: "../data/collectives/all_gather_3d"
-    csv_path: "../data/collectives/all_gather_3d"
-    xlml_metrics_dir: "../data/collectives/all_gather_3d"
-    xla_dump_dir: "../data/collectives/all_gather_3d/hlo_graphs"
+      - {
+          matrix_dim: 4096,
+          dtype: "float32",
+          mesh_shape: "4x2x2x2",
+          ici_size: 32,
+          sharding_strategy: "4x2x2x2", # Only d_1 axis (4 devices)
+          op_dimension: 3,
+          num_runs: 5,
+        }
+    trace_dir: "/tmp/collectives/all_gather_3d"
+    csv_path: "/tmp/collectives/all_gather_3d"
+    xlml_metrics_dir: "/tmp/collectives/all_gather_3d"
+    xla_dump_dir: "/tmp/collectives/all_gather_3d/hlo_graphs"
