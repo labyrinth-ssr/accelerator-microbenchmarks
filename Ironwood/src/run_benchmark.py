@@ -36,7 +36,7 @@ os.environ["LIBTPU_INIT_ARGS"] = (
       "--xla_tpu_use_tc_device_shape_on_sc=false "
       "--xla_tpu_dvfs_p_state=7 "
     #   "--xla_tpu_scoped_vmem_limit_kib=65536 "
-      "--xla_jf_dump_to=/tmp/llo/allgather "
+      "--xla_jf_dump_to=/tmp/tpu_logs/ "
 )
 
 COLLECTIVE_BENCHMARK_MAP = {
@@ -406,7 +406,7 @@ def run_single_benchmark(benchmark_config: Dict[str, Any], output_path: str):
         if llo_dump_dir and benchmark_name in COLLECTIVE_BENCHMARK_MAP:
             # Determine operator name based on benchmark
             operator_map = {
-                "all_gather": "all-gather",
+                "all_gather": "gather",
                 "psum": "all-reduce",
                 "psum_scatter": "reduce-scatter",
                 "all_to_all": "all-to-all",

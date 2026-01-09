@@ -42,25 +42,16 @@ benchmarks:
           dtype: "float32",
           mesh_shape: "4x2x2x2",
           ici_size: 32,
-          sharding_strategy: "1x2x1x1", # Only d_1 axis (4 devices)
-          op_dimension: 1,
-          num_runs: 5,
-        }
-      - {
-          matrix_dim: 4096,
-          dtype: "float32",
-          mesh_shape: "4x2x2x2",
-          ici_size: 32,
-          sharding_strategy: "4x1x1x1", # Only d_1 axis (4 devices)
-          op_dimension: 1,
-          num_runs: 5,
-        }
-      - {
-          matrix_dim: 4096,
-          dtype: "float32",
-          mesh_shape: "4x2x2x2",
-          ici_size: 32,
           sharding_strategy: "1x1x2x2", # Only d_1 axis (4 devices)
+          op_dimension: 1,
+          num_runs: 5,
+        }
+      - {
+          matrix_dim: 4096,
+          dtype: "float32",
+          mesh_shape: "4x2x2x2",
+          ici_size: 32,
+          sharding_strategy: "1x2x1x1", # Only d_1 axis (4 devices)
           op_dimension: 1,
           num_runs: 5,
         }
@@ -78,7 +69,7 @@ benchmarks:
           dtype: "float32",
           mesh_shape: "4x2x2x2",
           ici_size: 32,
-          sharding_strategy: "4x1x1x2", # Only d_1 axis (4 devices)
+          sharding_strategy: "4x1x1x1", # Only d_1 axis (4 devices)
           op_dimension: 1,
           num_runs: 5,
         }
@@ -87,46 +78,55 @@ benchmarks:
           dtype: "float32",
           mesh_shape: "4x2x2x2",
           ici_size: 32,
-          sharding_strategy: "4x2x1x2", # Only d_1 axis (4 devices)
-          op_dimension: 2,
+          sharding_strategy: "4x1x1x2", # Only d_1 axis (4 devices)
+          op_dimension: 1,
           num_runs: 5,
         }
-      - {
-          matrix_dim: 4096,
-          dtype: "float32",
-          mesh_shape: "4x2x2x2",
-          ici_size: 32,
-          sharding_strategy: "4x1x2x2", # Only d_1 axis (4 devices)
-          op_dimension: 2,
-          num_runs: 5,
-        }
-      - {
-          matrix_dim: 4096,
-          dtype: "float32",
-          mesh_shape: "4x2x2x2",
-          ici_size: 32,
-          sharding_strategy: "1x2x2x2", # Only d_1 axis (4 devices)
-          op_dimension: 2,
-          num_runs: 5,
-        }
-      - {
-          matrix_dim: 4096,
-          dtype: "float32",
-          mesh_shape: "4x2x2x2",
-          ici_size: 32,
-          sharding_strategy: "4x2x2x1", # Only d_1 axis (4 devices)
-          op_dimension: 3,
-          num_runs: 5,
-        }
-      - {
-          matrix_dim: 4096,
-          dtype: "float32",
-          mesh_shape: "4x2x2x2",
-          ici_size: 32,
-          sharding_strategy: "4x2x2x2", # Only d_1 axis (4 devices)
-          op_dimension: 3,
-          num_runs: 5,
-        }
+      # - {
+      #     matrix_dim: 4096,
+      #     dtype: "float32",
+      #     mesh_shape: "4x2x2x2",
+      #     ici_size: 32,
+      #     sharding_strategy: "4x2x1x2", # Only d_1 axis (4 devices)
+      #     op_dimension: 2,
+      #     num_runs: 5,
+      #   }
+      # - {
+      #     matrix_dim: 4096,
+      #     dtype: "float32",
+      #     mesh_shape: "4x2x2x2",
+      #     ici_size: 32,
+      #     sharding_strategy: "4x1x2x2", # Only d_1 axis (4 devices)
+      #     op_dimension: 2,
+      #     num_runs: 5,
+      #   }
+      # - {
+      #     matrix_dim: 4096,
+      #     dtype: "float32",
+      #     mesh_shape: "4x2x2x2",
+      #     ici_size: 32,
+      #     sharding_strategy: "1x2x2x2", # Only d_1 axis (4 devices)
+      #     op_dimension: 2,
+      #     num_runs: 5,
+      #   }
+      # - {
+      #     matrix_dim: 4096,
+      #     dtype: "float32",
+      #     mesh_shape: "4x2x2x2",
+      #     ici_size: 32,
+      #     sharding_strategy: "4x2x2x1", # Only d_1 axis (4 devices)
+      #     op_dimension: 3,
+      #     num_runs: 5,
+      #   }
+      # - {
+      #     matrix_dim: 4096,
+      #     dtype: "float32",
+      #     mesh_shape: "4x2x2x2",
+      #     ici_size: 32,
+      #     sharding_strategy: "4x2x2x2", # Only d_1 axis (4 devices)
+      #     op_dimension: 3,
+      #     num_runs: 5,
+      #   }
 
 
       # - {
@@ -305,4 +305,4 @@ benchmarks:
     csv_path: "/tmp/all_gather_1d"
     xlml_metrics_dir: "/tmp/all_gather_1d"
     xla_dump_dir: "/tmp/all_gather_1d/hlo_graphs"
-    llo_dump_dir: "/tmp/all_gather_1d/llo_graphs"
+    llo_dump_dir: "/tmp/tpu_logs/all_gather_1d/llo_graphs"
