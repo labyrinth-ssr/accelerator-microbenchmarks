@@ -36,7 +36,7 @@ os.environ["LIBTPU_INIT_ARGS"] = (
       "--xla_tpu_use_tc_device_shape_on_sc=true "
       "--xla_tpu_dvfs_p_state=7 "
     #   "--xla_tpu_scoped_vmem_limit_kib=65536 "
-      "--xla_jf_dump_to=/tmp/tpu_logs/ "
+      "--xla_jf_dump_to=/tmp/tpu_logs/llo "
 )
 
 COLLECTIVE_BENCHMARK_MAP = {
@@ -360,7 +360,7 @@ def run_single_benchmark(benchmark_config: Dict[str, Any], output_path: str):
     if not benchmark_name:
         raise ValueError("Each benchmark must have a 'benchmark_name'.")
     
-    tmp_llo_dump_dir = "/tmp/tpu_logs"
+    tmp_llo_dump_dir = "/tmp/tpu_logs/llo"
 
     # Clean up output directories before starting the benchmark
     dirs_to_clean = [trace_dir, xlml_metrics_dir, csv_path, xla_dump_dir, llo_dump_dir, tmp_llo_dump_dir]
@@ -415,7 +415,7 @@ def run_single_benchmark(benchmark_config: Dict[str, Any], output_path: str):
             }
             operator_name = operator_map.get(benchmark_name, "all-gather")
             rename_llo_dump(
-                llo_dump_dir="/tmp/tpu_logs",
+                llo_dump_dir="/tmp/tpu_logs/llo",
                 dest_llo_dump_dir=llo_dump_dir,
                 benchmark_name=benchmark_name,
                 benchmark_param=original_benchmark_param,
