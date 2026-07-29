@@ -1,0 +1,135 @@
+# One-case Falcon profile for MXU behavior reverse engineering on TPU v7x.
+#
+# Change only MXU_M, MXU_K, or MXU_N for the next falsification case, and
+# submit exactly one rendered manifest at a time.  The checked-in baseline is
+# intentionally 256 x 256 x 256.
+name: tensorcore-llo-v7x-m256-k256-n256
+exp_type: PROFILING
+artifact_type: operator-profile
+cluster_name: tpu7x-cluster
+profile: true
+tags: [profile, operator-optimization, pallas, mxu-reverse-engineering]
+model_version: tensorcore-mxu-model-v1
+config: '{"m":256,"k":256,"n":256,"program_count":1,"input":"bf16","accumulator":"fp32","output":"bf16"}'
+role_to_task_spec:
+  worker:
+    replica: 1
+    image: us-docker.pkg.dev/cloud-tpu-images/jax-ai-image/tpu:jax0.9.0-rev1
+    device_count: 8
+    device_type: v7x
+    device_topo: 2x2x1
+    sources:
+      - name: accelerator-microbenchmarks
+        type: git
+        repo: https://github.com/labyrinth-ssr/accelerator-microbenchmarks.git
+        ref: codex/mxu-behavior-modeling
+        path: /workspace/accelerator-microbenchmarks
+    envs:
+      MXU_M: "256"
+      MXU_K: "256"
+      MXU_N: "256"
+      MXU_WARMUP: "5"
+      MXU_REPEAT: "20"
+      MXU_ENABLE_XPROF: "1"
+      MXU_SOURCE_REPOSITORY: https://github.com/labyrinth-ssr/accelerator-microbenchmarks.git
+      MXU_SOURCE_REF: codex/mxu-behavior-modeling
+      TMPDIR: /tmp/tpu_logs/tmp
+      PIP_CACHE_DIR: /tmp/tpu_logs/pip-cache
+      UV_CACHE_DIR: /tmp/tpu_logs/uv-cache
+      PYTHONUNBUFFERED: "1"
+    command: |
+      set -eu
+      ulimit -c 0
+      mkdir -p "$TMPDIR" "$PIP_CACHE_DIR" "$UV_CACHE_DIR"
+
+      SOURCE_ROOT=/workspace/accelerator-microbenchmarks
+      ARTIFACT_ROOT="${ARTIFACT_LOCAL_DIR:-/tmp/tensorcore-mxu-artifact}"
+      CASE_ID="m${MXU_M}_k${MXU_K}_n${MXU_N}"
+      CASE_DIR="$ARTIFACT_ROOT/cases/$CASE_ID"
+      LLO_RAW_DIR="$CASE_DIR/compiler/llo/raw"
+      mkdir -p "$LLO_RAW_DIR" /tmp/tpu_logs/jax-compilation-cache
+
+      LIBTPU_PROFILE_ARGS="--xla_enable_custom_call_region_trace=true --xla_xprof_register_llo_debug_info=true --xla_mosaic_dump_to=$LLO_RAW_DIR"
+      export LIBTPU_INIT_ARGS="${LIBTPU_INIT_ARGS:+$LIBTPU_INIT_ARGS }$LIBTPU_PROFILE_ARGS"
+      export JAX_COMPILATION_CACHE_DIR=/tmp/tpu_logs/jax-compilation-cache
+      export MXU_SOURCE_COMMIT
+      MXU_SOURCE_COMMIT="$(git -C "$SOURCE_ROOT" rev-parse HEAD)"
+
+      python3 -c 'import importlib.metadata as m; print({p: m.version(p) for p in ("jax", "jaxlib", "libtpu")})'
+      python3 "$SOURCE_ROOT/Ironwood/src/benchmark_tensorcore_pallas.py" \
+        --m "$MXU_M" \
+        --k "$MXU_K" \
+        --n "$MXU_N" \
+        --warmup "$MXU_WARMUP" \
+        --repeat "$MXU_REPEAT" \
+        --artifact-dir "$ARTIFACT_ROOT"
+
+      python3 - "$ARTIFACT_ROOT" "$CASE_ID" <<'PY'
+      import hashlib
+      import json
+      import pathlib
+      import shutil
+      import sys
+
+      root = pathlib.Path(sys.argv[1])
+      case_id = sys.argv[2]
+      case_dir = root / "cases" / case_id
+      raw_dir = case_dir / "compiler" / "llo" / "raw"
+      files = []
+      for path in sorted(p for p in raw_dir.rglob("*") if p.is_file()):
+          digest = hashlib.sha256(path.read_bytes()).hexdigest()
+          files.append({
+              "path": str(path.relative_to(raw_dir)),
+              "pass": path.stem,
+              "size_bytes": path.stat().st_size,
+              "sha256": digest,
+          })
+      environment = json.loads((root / "environment.json").read_text())
+      index = {
+          "schema_version": 1,
+          "case_id": case_id,
+          "raw_directory": str(raw_dir.relative_to(root)),
+          "file_count": len(files),
+          "files": files,
+          "compiler_packages": environment["packages"],
+          "source": environment["source"],
+      }
+      index_path = case_dir / "compiler" / "llo" / "file_index.json"
+      index_path.write_text(
+          json.dumps(index, indent=2, sort_keys=True) + "\n",
+          encoding="utf-8",
+      )
+      if not files:
+          raise RuntimeError(f"no LLO files were dumped under {raw_dir}")
+
+      # Falcon's generic analyzers consume rank-scoped evidence.  Keep the
+      # case-scoped raw directory authoritative and copy it unchanged into the
+      # rank-0 compatibility view.
+      rank_dir = root / "rank-0"
+      rank_llo = rank_dir / "compiler" / "llo"
+      rank_llo.mkdir(parents=True, exist_ok=True)
+      for source in raw_dir.rglob("*"):
+          if source.is_file():
+              target = rank_llo / source.relative_to(raw_dir)
+              target.parent.mkdir(parents=True, exist_ok=True)
+              shutil.copy2(source, target)
+
+      metrics = json.loads((case_dir / "metrics.json").read_text())
+      benchmark_dir = rank_dir / "benchmark"
+      benchmark_dir.mkdir(parents=True, exist_ok=True)
+      (benchmark_dir / "metrics.jsonl").write_text(
+          json.dumps(metrics, sort_keys=True) + "\n",
+          encoding="utf-8",
+      )
+
+      source_trace = case_dir / "profiling" / "xprof"
+      target_trace = rank_dir / "profiling" / "xprof"
+      trace_files = (
+          [path for path in source_trace.rglob("*") if path.is_file()]
+          if source_trace.exists()
+          else []
+      )
+      if not trace_files:
+          raise RuntimeError(f"no XProf files were captured under {source_trace}")
+      shutil.copytree(source_trace, target_trace, dirs_exist_ok=True)
+      PY
